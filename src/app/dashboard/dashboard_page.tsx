@@ -28,12 +28,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl font-bold text-white mb-6">
-        ML Dashboard
-        <span className="text-gray-400 text-base font-normal ml-3">
-          Coming Soon — ML/DL predictions will appear here
-        </span>
-      </h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Dashboard</h1>
 
       {/* Technical Indicators */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -76,37 +71,8 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* ML Predictions Placeholder */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-8">
-        <div className="text-center py-12">
-          <div className="text-5xl mb-4">🤖</div>
-          <h2 className="text-xl font-semibold text-white mb-2">
-            ML Predictions Coming Soon
-          </h2>
-          <p className="text-gray-400 max-w-md mx-auto">
-            XGBoost, LSTM, Transformer 등 다양한 ML/DL 모델의 예측 결과가
-            이 대시보드에 표시됩니다. Google Colab에서 학습 후 API를 통해
-            업로드하면 실시간 반영됩니다.
-          </p>
-          <div className="flex justify-center gap-3 mt-6">
-            <span className="bg-emerald-900/50 text-emerald-300 text-xs px-3 py-1 rounded-full">
-              XGBoost
-            </span>
-            <span className="bg-blue-900/50 text-blue-300 text-xs px-3 py-1 rounded-full">
-              LSTM
-            </span>
-            <span className="bg-purple-900/50 text-purple-300 text-xs px-3 py-1 rounded-full">
-              Transformer
-            </span>
-            <span className="bg-orange-900/50 text-orange-300 text-xs px-3 py-1 rounded-full">
-              AutoGluon
-            </span>
-          </div>
-        </div>
-      </div>
-
       {/* Data Stats */}
-      <div className="mt-8 bg-gray-900 border border-gray-800 rounded-xl p-5">
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
         <h3 className="text-white font-semibold mb-3">Data Summary</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
