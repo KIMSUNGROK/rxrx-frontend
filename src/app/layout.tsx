@@ -17,12 +17,6 @@ function Navbar() {
                 src="https://www.recursion.com/images/recursion-logo-white.svg" 
                 alt="Recursion" 
                 className="h-6 w-auto dark:invert dark:opacity-90"
-                onError={(e) => {
-                  // 로고 로드 실패시 폴백 (기존 아이콘)
-                  e.currentTarget.style.display = 'none';
-                  const svg = e.currentTarget.parentElement?.querySelector('svg');
-                  if (svg) svg.style.display = 'block';
-                }}
               />
               {/* Fallback SVG if image fails */}
               <svg 
@@ -44,7 +38,7 @@ function Navbar() {
           </div>
           <div className="flex items-center gap-6">
             <a href="/" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">홈</a>
-            <a href="/dashboard" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">대시보드</a>
+            <a href="/board" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">자유게시판</a>
             <a href="/board" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">자유게시판</a>
             <a
               href="https://rxrx-backend.onrender.com/docs"
