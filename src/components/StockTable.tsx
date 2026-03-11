@@ -4,7 +4,7 @@ import { StockPrice } from "@/lib/api";
 
 export default function StockTable({ data }: { data: StockPrice[] }) {
   if (!data || data.length === 0) {
-    return <p className="text-gray-500 text-center py-8">No data available</p>;
+    return <p className="text-gray-500 text-center py-8">사용 가능한 데이터가 없습니다</p>;
   }
 
   // 최신 순 정렬
@@ -16,13 +16,13 @@ export default function StockTable({ data }: { data: StockPrice[] }) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-700 text-gray-400">
-            <th className="text-left py-3 px-3">Date</th>
-            <th className="text-right py-3 px-3">Open</th>
-            <th className="text-right py-3 px-3">High</th>
-            <th className="text-right py-3 px-3">Low</th>
-            <th className="text-right py-3 px-3">Close</th>
-            <th className="text-right py-3 px-3">Volume</th>
+          <tr className="border-b-2 border-gray-200 text-gray-500 bg-gray-50">
+            <th className="text-left py-3 px-4 font-semibold uppercase tracking-wider">일자</th>
+            <th className="text-right py-3 px-4 font-semibold uppercase tracking-wider">시가</th>
+            <th className="text-right py-3 px-4 font-semibold uppercase tracking-wider">고가</th>
+            <th className="text-right py-3 px-4 font-semibold uppercase tracking-wider">저가</th>
+            <th className="text-right py-3 px-4 font-semibold uppercase tracking-wider">종가</th>
+            <th className="text-right py-3 px-4 font-semibold uppercase tracking-wider">거래량</th>
           </tr>
         </thead>
         <tbody>
@@ -34,30 +34,30 @@ export default function StockTable({ data }: { data: StockPrice[] }) {
             return (
               <tr
                 key={row.id}
-                className="border-b border-gray-800/50 hover:bg-gray-800/30 transition"
+                className="border-b border-gray-100 hover:bg-gray-50 transition"
               >
-                <td className="py-2.5 px-3 text-gray-300">{row.trade_date}</td>
-                <td className="py-2.5 px-3 text-right text-gray-300">
+                <td className="py-3 px-4 text-gray-600 font-medium">{row.trade_date}</td>
+                <td className="py-3 px-4 text-right text-gray-600">
                   ${row.open.toFixed(2)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-gray-300">
+                <td className="py-3 px-4 text-right text-gray-600">
                   ${row.high.toFixed(2)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-gray-300">
+                <td className="py-3 px-4 text-right text-gray-600">
                   ${row.low.toFixed(2)}
                 </td>
                 <td
-                  className={`py-2.5 px-3 text-right font-medium ${
+                  className={`py-3 px-4 text-right font-medium ${
                     isUp
-                      ? "text-emerald-400"
+                      ? "text-emerald-600"
                       : isDown
-                      ? "text-red-400"
-                      : "text-gray-300"
+                      ? "text-red-600"
+                      : "text-gray-600"
                   }`}
                 >
                   ${row.close.toFixed(2)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-gray-400">
+                <td className="py-3 px-4 text-right text-gray-500">
                   {row.volume.toLocaleString()}
                 </td>
               </tr>

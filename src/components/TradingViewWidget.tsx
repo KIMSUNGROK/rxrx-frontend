@@ -19,13 +19,13 @@ export default function TradingViewWidget() {
     script.innerHTML = JSON.stringify({
       autosize: true,
       symbol: "NASDAQ:RXRX",
-      interval: "D",
+      interval: "1D", // '1D'로 설정하여 '1일' 등으로 정상 출력되도록 유도
       timezone: "Asia/Seoul",
-      theme: "dark",
+      theme: "light",
       style: "1",
       locale: "kr",
-      backgroundColor: "rgba(17, 24, 39, 1)",
-      gridColor: "rgba(55, 65, 81, 0.3)",
+      backgroundColor: "rgba(255, 255, 255, 1)",
+      gridColor: "rgba(243, 244, 246, 1)",
       allow_symbol_change: false,
       calendar: false,
       support_host: "https://www.tradingview.com",

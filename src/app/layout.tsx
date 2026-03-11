@@ -8,25 +8,40 @@ export const metadata: Metadata = {
 
 function Navbar() {
   return (
-    <nav className="border-b border-gray-800 bg-gray-950">
+    <nav className="border-b border-gray-200 bg-white/90 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <a href="/" className="text-xl font-bold text-white">
-              <span className="text-emerald-400">RXRX</span>
-              <span className="text-gray-400 text-sm ml-2 font-normal">Stock Intelligence</span>
+          <div className="flex items-center gap-3">
+            <a href="/" className="flex items-center gap-2 text-xl font-bold text-gray-900">
+              {/* Recursion Logo Placeholder (using SVG from recursion.com if available, otherwise stylized text) */}
+              <svg 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="w-6 h-6 text-gray-900"
+              >
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span>RXRX</span>
             </a>
+            <span className="text-gray-500 text-sm font-normal hidden sm:inline-block border-l border-gray-300 pl-3">주식 인텔리전스</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="/" className="text-gray-300 hover:text-white text-sm transition">Home</a>
-            <a href="/dashboard" className="text-gray-300 hover:text-white text-sm transition">Dashboard</a>
+            <a href="/" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">홈</a>
+            <a href="/dashboard" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">대시보드</a>
             <a
               href="https://rxrx-backend.onrender.com/docs"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-300 text-sm transition"
+              className="text-gray-400 hover:text-gray-600 text-sm font-medium transition flex items-center gap-1"
             >
-              API Docs ↗
+              API 문서 
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             </a>
           </div>
         </div>
@@ -37,10 +52,10 @@ function Navbar() {
 
 function Footer() {
   return (
-    <footer className="border-t border-gray-800 bg-gray-950 py-6 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
-        <p>RXRX Stock Intelligence Platform &copy; {new Date().getFullYear()}</p>
-        <p className="mt-1 text-gray-600">
+    <footer className="border-t border-gray-200 bg-gray-50 py-8 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
+        <p>RXRX 주식 인텔리전스 플랫폼 &copy; {new Date().getFullYear()}</p>
+        <p className="mt-2 text-gray-400">
           Powered by Next.js + FastAPI + Supabase | Data from Yahoo Finance
         </p>
       </div>
@@ -54,8 +69,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="dark">
-      <body className="bg-gray-950 text-gray-100 min-h-screen flex flex-col antialiased">
+    <html lang="ko">
+      <body className="bg-white text-gray-900 min-h-screen flex flex-col antialiased font-sans selection:bg-gray-200">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
