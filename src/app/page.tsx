@@ -60,6 +60,7 @@ export default async function Home() {
   
   const highs = dailyData.map((d) => d.high);
   const lows = dailyData.map((d) => d.low);
+  const high52 = highs.length > 0 ? Math.max(...highs) : 0;
   const low52 = lows.length > 0 ? Math.min(...lows) : 0;
 
   return (
