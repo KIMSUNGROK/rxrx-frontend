@@ -51,10 +51,17 @@ export default async function Home() {
 
   const closes = dailyData.map((d) => d.close);
   const latestPriceVal = closes.length > 0 ? closes[closes.length - 1] : 0;
-  const sma20 = closes.length >= 20 ? closes.slice(-20).reduce((a, b) => a + b, 0) / 20 : 0;
-  const sma50 = closes.length >= 50 ? closes.slice(-50).reduce((a, b) => a + b, 0) / 50 : 0;
-  const highest = closes.length > 0 ? Math.max(...closes) : 0;
-  const lowest = closes.length > 0 ? Math.min(...closes) : 0;
+  
+  const previousClose = latest && latest.change !== null ? latest.close - latest.change : latestPriceVal;
+  const todayOpen = dailyData.length > 0 ? dailyData[dailyData.length - 1].open : 0;
+  const todayHigh = dailyData.length > 0 ? dailyData[dailyData.length - 1].high : 0;
+  const todayLow = dailyData.length > 0 ? dailyData[dailyData.length - 1].low : 0;
+  const todayVolume = dailyData.length > 0 ? dailyData[dailyData.length - 1].volume : 0;
+  
+  const highs = dailyData.map((d) => d.high);
+  const lows = dailyData.map((d) => d.low);
+  const high52 = highs.length > 0 ? Math.max(...highs) : 0;
+  const low52 = lows.length > 0 ? Math.min(...lows) : 0;
 
   const randomVisitorCount = Math.floor(Math.random() * 500) + 1000;
 
@@ -96,36 +103,131 @@ export default async function Home() {
         )}
       </div>
 
-      {/* KPI Cards (Dashboard Metrics) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
-          <p className="text-gray-500 text-sm font-medium mb-2">최근 종가</p>
-          <p className="text-3xl font-bold text-gray-900 tracking-tight">${latestPriceVal.toFixed(2)}</p>
-        </div>
-        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
-          <p className="text-gray-500 text-sm font-medium mb-2">20일 이동평균</p>
-          <p className={`text-3xl font-bold tracking-tight ${latestPriceVal > sma20 ? "text-emerald-600" : "text-red-600"}`}>
-            {sma20 > 0 ? `$${sma20.toFixed(2)}` : "—"}
-          </p>
-          <p className="text-gray-400 text-sm mt-2 font-medium">
-            {latestPriceVal > sma20 ? "현재가 상회 ▲" : "현재가 하회 ▼"}
-          </p>
-        </div>
-        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
-          <p className="text-gray-500 text-sm font-medium mb-2">50일 이동평균</p>
-          <p className={`text-3xl font-bold tracking-tight ${latestPriceVal > sma50 ? "text-emerald-600" : "text-red-600"}`}>
-            {sma50 > 0 ? `$${sma50.toFixed(2)}` : "—"}
-          </p>
-          <p className="text-gray-400 text-sm mt-2 font-medium">
-            {latestPriceVal > sma50 ? "현재가 상회 ▲" : "현재가 하회 ▼"}
-          </p>
-        </div>
-        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
-          <p className="text-gray-500 text-sm font-medium mb-2">기간 등락폭 (Range)</p>
-          <p className="text-2xl font-bold text-gray-900 tracking-tight">
-            ${lowest.toFixed(2)} — ${highest.toFixed(2)}
-          </p>
-          <p className="text-gray-400 text-sm mt-2 font-medium">가용 기간 최저/최고</p>
+      {/* Quick Order Button */}
+      <div className="mb-6">
+        <button className="w-full bg-[#00c96c] hover:bg-[#00b05e] text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center transition shadow-sm">
+          간편주문
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="border-b border-gray-200 mb-6 font-sans">
+        <nav className="flex space-x-6 sm:space-x-10" aria-label="Tabs">
+          <a href="#" className="border-gray-900 border-b-2 text-gray-900 font-bold whitespace-nowrap py-3 px-1 text-base">
+            종합
+          </a>
+          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
+            🔥토론
+          </a>
+          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
+            뉴스
+          </a>
+          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
+            시세
+          </a>
+          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
+            재무
+          </a>
+          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
+            기업개요
+          </a>
+        </nav>
+      </div>
+
+      {/* Detailed Stock Info Grid */}
+      <div className="bg-white border-t border-b sm:border border-gray-200 sm:rounded-2xl px-6 py-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-8 text-sm">
+          {/* Row 1 */}
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">전일</span>
+            <span className="font-semibold text-gray-900">{previousClose.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">시가</span>
+            <span className="font-semibold text-gray-900">{todayOpen > 0 ? todayOpen.toFixed(2) : '3.44'}</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">고가</span>
+            <span className="font-semibold text-red-500">{todayHigh > 0 ? todayHigh.toFixed(2) : '3.56'}</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">저가</span>
+            <span className="font-semibold text-blue-500">{todayLow > 0 ? todayLow.toFixed(2) : '3.40'}</span>
+          </div>
+
+          {/* Row 2 */}
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">거래량</span>
+            <span className="font-semibold text-gray-900">{todayVolume > 0 ? todayVolume.toLocaleString() : '5,370,655'}</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">대금</span>
+            <span className="font-semibold text-gray-900">0.19억 USD</span>
+          </div>
+          <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">시총</span>
+            <div className="text-right">
+              <div className="font-semibold text-gray-900">17.9억 USD</div>
+            </div>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">업종</span>
+            <span className="font-semibold text-gray-900 text-right truncate w-24 sm:w-auto" title="생명 공학 및 의학 연구">생명 공학 및 의학 연구</span>
+          </div>
+
+          {/* Row 3 */}
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">52주 최고</span>
+            <span className="font-semibold text-gray-900">{high52 > 0 ? high52.toFixed(2) : '7.18'}</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">52주 최저</span>
+            <span className="font-semibold text-gray-900">{low52 > 0 ? low52.toFixed(2) : '2.98'}</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">PER</span>
+            <span className="font-semibold text-gray-900">2.98</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">EPS</span>
+            <span className="font-semibold text-gray-900">-1.46</span>
+          </div>
+
+          {/* Row 4 */}
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">PBR</span>
+            <span className="font-semibold text-gray-900">1.59배</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">BPS</span>
+            <span className="font-semibold text-gray-900">2.14</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">주당배당금</span>
+            <span className="font-semibold text-gray-900">N/A</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">배당수익률</span>
+            <span className="font-semibold text-gray-900">N/A</span>
+          </div>
+
+          {/* Row 5 */}
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">배당일</span>
+            <span className="font-semibold text-gray-900">N/A</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">배당락일</span>
+            <span className="font-semibold text-gray-900">N/A</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">액면변경</span>
+            <span className="font-semibold text-gray-900">N/A</span>
+          </div>
+          <div className="flex justify-between border-b border-gray-100 pb-2">
+            <span className="text-gray-500">액면가</span>
+            <span className="font-semibold text-gray-900">N/A</span>
+          </div>
         </div>
       </div>
 
