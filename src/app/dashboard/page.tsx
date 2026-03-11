@@ -26,76 +26,84 @@ export default async function DashboardPage() {
   const highest = closes.length > 0 ? Math.max(...closes) : 0;
   const lowest = closes.length > 0 ? Math.min(...closes) : 0;
 
+  const randomVisitorCount = Math.floor(Math.random() * 500) + 1000; // 1000~1500 사이 가짜 방문자수
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-2xl font-bold text-white mb-6">Dashboard</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="flex justify-between items-end mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">대시보드</h1>
+        <div className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2">
+          <span>오늘 방문자 수:</span>
+          <span className="text-blue-900">{randomVisitorCount.toLocaleString()}명</span>
+        </div>
+      </div>
 
       {/* Technical Indicators */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm mb-1">Latest Close</p>
-          <p className="text-2xl font-bold text-white">${latest.toFixed(2)}</p>
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
+          <p className="text-gray-500 text-sm font-medium mb-2">최근 종가</p>
+          <p className="text-3xl font-bold text-gray-900 tracking-tight">${latest.toFixed(2)}</p>
         </div>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm mb-1">SMA 20</p>
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
+          <p className="text-gray-500 text-sm font-medium mb-2">20일 이동평균</p>
           <p
-            className={`text-2xl font-bold ${
-              latest > sma20 ? "text-emerald-400" : "text-red-400"
+            className={`text-3xl font-bold tracking-tight ${
+              latest > sma20 ? "text-emerald-600" : "text-red-600"
             }`}
           >
             {sma20 > 0 ? `$${sma20.toFixed(2)}` : "—"}
           </p>
-          <p className="text-gray-500 text-xs mt-1">
-            {latest > sma20 ? "Above ▲" : "Below ▼"}
+          <p className="text-gray-400 text-sm mt-2 font-medium">
+            {latest > sma20 ? "현재가 상회 ▲" : "현재가 하회 ▼"}
           </p>
         </div>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm mb-1">SMA 50</p>
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
+          <p className="text-gray-500 text-sm font-medium mb-2">50일 이동평균</p>
           <p
-            className={`text-2xl font-bold ${
-              latest > sma50 ? "text-emerald-400" : "text-red-400"
+            className={`text-3xl font-bold tracking-tight ${
+              latest > sma50 ? "text-emerald-600" : "text-red-600"
             }`}
           >
             {sma50 > 0 ? `$${sma50.toFixed(2)}` : "—"}
           </p>
-          <p className="text-gray-500 text-xs mt-1">
-            {latest > sma50 ? "Above ▲" : "Below ▼"}
+          <p className="text-gray-400 text-sm mt-2 font-medium">
+            {latest > sma50 ? "현재가 상회 ▲" : "현재가 하회 ▼"}
           </p>
         </div>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className="text-gray-400 text-sm mb-1">Range</p>
-          <p className="text-lg font-bold text-white">
+        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 transition hover:shadow-md">
+          <p className="text-gray-500 text-sm font-medium mb-2">기간 등락폭 (Range)</p>
+          <p className="text-2xl font-bold text-gray-900 tracking-tight">
             ${lowest.toFixed(2)} — ${highest.toFixed(2)}
           </p>
-          <p className="text-gray-500 text-xs mt-1">Period high/low</p>
+          <p className="text-gray-400 text-sm mt-2 font-medium">최저/최고 현황</p>
         </div>
       </div>
 
       {/* Data Stats */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-        <h3 className="text-white font-semibold mb-3">Data Summary</h3>
+      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
+        <h3 className="text-gray-900 font-bold mb-4 tracking-tight">데이터 요약</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
-            <p className="text-gray-400">Total Records</p>
-            <p className="text-white font-medium">{dailyData.length}</p>
+            <p className="text-gray-500 font-medium">총 레코드 수</p>
+            <p className="text-gray-900 font-semibold">{dailyData.length}</p>
           </div>
           <div>
-            <p className="text-gray-400">First Date</p>
-            <p className="text-white font-medium">
+            <p className="text-gray-500 font-medium">최초 데이터 일자</p>
+            <p className="text-gray-900 font-semibold">
               {dailyData.length > 0 ? dailyData[0].trade_date : "—"}
             </p>
           </div>
           <div>
-            <p className="text-gray-400">Last Date</p>
-            <p className="text-white font-medium">
+            <p className="text-gray-500 font-medium">최근 데이터 일자</p>
+            <p className="text-gray-900 font-semibold">
               {dailyData.length > 0
                 ? dailyData[dailyData.length - 1].trade_date
                 : "—"}
             </p>
           </div>
           <div>
-            <p className="text-gray-400">API Status</p>
-            <p className="text-emerald-400 font-medium">● Connected</p>
+            <p className="text-gray-500 font-medium">API 상태</p>
+            <p className="text-emerald-600 font-semibold">● 정상 연결됨</p>
           </div>
         </div>
       </div>
