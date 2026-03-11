@@ -60,10 +60,7 @@ export default async function Home() {
   
   const highs = dailyData.map((d) => d.high);
   const lows = dailyData.map((d) => d.low);
-  const high52 = highs.length > 0 ? Math.max(...highs) : 0;
   const low52 = lows.length > 0 ? Math.min(...lows) : 0;
-
-  const randomVisitorCount = Math.floor(Math.random() * 500) + 1000;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -76,10 +73,6 @@ export default async function Home() {
             <span className="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2.5 py-1 rounded-full font-semibold">
               NASDAQ
             </span>
-          </div>
-          <div className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2">
-            <span>오늘 방문자 수:</span>
-            <span className="text-blue-900">{randomVisitorCount.toLocaleString()}명</span>
           </div>
         </div>
         {latest && (
@@ -101,37 +94,6 @@ export default async function Home() {
             </span>
           </div>
         )}
-      </div>
-
-      {/* Quick Order Button */}
-      <div className="mb-6">
-        <button className="w-full bg-[#00c96c] hover:bg-[#00b05e] text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center transition shadow-sm">
-          간편주문
-        </button>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-gray-200 mb-6 font-sans">
-        <nav className="flex space-x-6 sm:space-x-10" aria-label="Tabs">
-          <a href="#" className="border-gray-900 border-b-2 text-gray-900 font-bold whitespace-nowrap py-3 px-1 text-base">
-            종합
-          </a>
-          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
-            🔥토론
-          </a>
-          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
-            뉴스
-          </a>
-          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
-            시세
-          </a>
-          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
-            재무
-          </a>
-          <a href="#" className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-3 px-1 border-b-2 font-medium text-base">
-            기업개요
-          </a>
-        </nav>
       </div>
 
       {/* Detailed Stock Info Grid */}
