@@ -62,6 +62,7 @@ export default async function Home() {
       ? Math.round(volumes.reduce((a, b) => a + b, 0) / volumes.length)
       : 0;
 
+  return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
       <div className="mb-10">
