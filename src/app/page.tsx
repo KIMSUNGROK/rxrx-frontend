@@ -61,19 +61,20 @@ export default async function Home() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header */}
-      <div className="flex justify-between items-end mb-10">
-        <div className="flex items-baseline gap-3">
-          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">RXRX</h1>
-          <span className="text-gray-500 text-xl font-medium">Recursion Pharmaceuticals</span>
-          <span className="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2.5 py-1 rounded-full font-semibold">
-            NASDAQ
-          </span>
+      <div className="mb-10">
+        <div className="flex justify-between items-end">
+          <div className="flex items-baseline gap-3">
+            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">RXRX</h1>
+            <span className="text-gray-500 text-xl font-medium">Recursion Pharmaceuticals</span>
+            <span className="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2.5 py-1 rounded-full font-semibold">
+              NASDAQ
+            </span>
+          </div>
+          <div className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2">
+            <span>오늘 방문자 수:</span>
+            <span className="text-blue-900">{randomVisitorCount.toLocaleString()}명</span>
+          </div>
         </div>
-        <div className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2">
-          <span>오늘 방문자 수:</span>
-          <span className="text-blue-900">{randomVisitorCount.toLocaleString()}명</span>
-        </div>
-      </div>
         {latest && (
           <div className="flex items-baseline gap-3 mt-4">
             <span className="text-5xl font-bold text-gray-900 tracking-tight">
