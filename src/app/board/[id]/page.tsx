@@ -113,7 +113,7 @@ export default function PostDetailPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header section with back button */}
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6">
         <Link 
           href="/board" 
           className="text-emerald-600 hover:text-emerald-700 font-medium inline-flex items-center transition"
@@ -123,22 +123,6 @@ export default function PostDetailPage() {
           </svg>
           목록으로
         </Link>
-
-        {/* Action Controls */}
-        <div className="flex gap-2">
-          <button 
-            onClick={handleEdit}
-            className="px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-semibold transition"
-          >
-            수정
-          </button>
-          <button 
-            onClick={handleDelete}
-            className="px-4 py-2 border border-red-600 text-red-600 hover:bg-red-50 rounded-lg text-sm font-semibold transition"
-          >
-            삭제
-          </button>
-        </div>
       </div>
 
       <div className="bg-white border border-gray-200 shadow-sm rounded-2xl overflow-hidden">
@@ -173,6 +157,22 @@ export default function PostDetailPage() {
             <p className="text-gray-500 italic">내용이 없습니다.</p>
           )}
         </div>
+      </div>
+
+      {/* Action Controls - Below Content */}
+      <div className="flex justify-end gap-2 mt-6">
+        <button 
+          onClick={handleEdit}
+          className="px-4 py-2 border border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg text-sm font-medium transition"
+        >
+          수정
+        </button>
+        <button 
+          onClick={handleDelete}
+          className="px-4 py-2 border border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-lg text-sm font-medium transition"
+        >
+          삭제
+        </button>
       </div>
     </div>
   );
