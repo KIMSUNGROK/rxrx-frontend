@@ -21,14 +21,14 @@ export default async function Home() {
           {/* Label */}
           <div className="animate-fade-in-up [animation-delay:200ms] opacity-0 fill-mode-forwards">
             <span className="font-['DM_Mono'] text-[11px] uppercase tracking-[0.35em] text-[#1a9e96] font-medium mb-6 block">
-              AI-POWERED DRUG DISCOVERY
+              RECURSION PHARMACEUTICALS
             </span>
           </div>
 
           {/* Title - responsive size using clamp */}
-          <h1 className="animate-fade-in-up [animation-delay:400ms] opacity-0 fill-mode-forwards font-['Syne'] text-[clamp(26px,4.1vw,51px)] font-[800] leading-[1.06] tracking-[-0.035em] text-[#1a1a2e] mb-6">
-            Pioneering <span className="text-gradient-primary">TechBio</span> Solutions
-            <br /> in Drug Discovery
+          <h1 className="animate-fade-in-up [animation-delay:400ms] opacity-0 fill-mode-forwards font-['Syne'] text-[clamp(24px,3.8vw,46px)] font-[800] leading-[1.15] tracking-[-0.035em] text-[#1a1a2e] mb-6">
+            리커전 파마슈티컬스
+            <br /><span className="text-gradient-primary">한국인 투자 커뮤니티</span>
           </h1>
 
           {/* Subtext */}

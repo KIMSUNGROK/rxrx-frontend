@@ -47,22 +47,8 @@ export default function Navbar() {
         <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3 group">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-[#1a1a2e] group-hover:text-[#1a9e96] transition-colors duration-300"
-              >
-                <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
-                <circle cx="20" cy="8" r="2" fill="currentColor" />
-                <circle cx="4" cy="16" r="2" fill="currentColor" />
-                <path d="M15.5 10L18.5 9" stroke="currentColor" strokeWidth="1.5" />
-                <path d="M8.5 14L5.5 15" stroke="currentColor" strokeWidth="1.5" />
-              </svg>
-              <span className="font-['Syne'] text-[17px] font-bold text-[#1a1a2e] tracking-tight group-hover:text-[#1a9e96] transition-colors duration-300">
-                RECURSION
+              <span className="font-['Syne'] text-[15px] font-bold text-[#1a1a2e] tracking-tight group-hover:text-[#1a9e96] transition-colors duration-300 uppercase">
+                RECURSION PHARMACEUTICALS
               </span>
             </Link>
           </div>
