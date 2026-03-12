@@ -37,16 +37,27 @@ export default function NewsPage() {
   useEffect(() => {
     setIsAdmin(localStorage.getItem("rxrx_admin_logged_in") === "true");
 
-    const savedNews = localStorage.getItem("rxrx_news_posts");
-    if (savedNews) {
-      try {
-        setNews(JSON.parse(savedNews));
-      } catch (e) {
+    const SEED_VERSION = "v2"; // bump this to force reseed
+    const storedVersion = localStorage.getItem("rxrx_news_seed_version");
+    
+    if (storedVersion === SEED_VERSION) {
+      // Same version — load user's data
+      const savedNews = localStorage.getItem("rxrx_news_posts");
+      if (savedNews) {
+        try {
+          setNews(JSON.parse(savedNews));
+        } catch (e) {
+          setNews(defaultNews);
+        }
+      } else {
         setNews(defaultNews);
+        localStorage.setItem("rxrx_news_posts", JSON.stringify(defaultNews));
       }
     } else {
+      // New version — reseed
       setNews(defaultNews);
       localStorage.setItem("rxrx_news_posts", JSON.stringify(defaultNews));
+      localStorage.setItem("rxrx_news_seed_version", SEED_VERSION);
     }
     setIsLoaded(true);
   }, []);

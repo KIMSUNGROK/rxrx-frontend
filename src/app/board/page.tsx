@@ -36,21 +36,30 @@ export default function BoardPage() {
 
   useEffect(() => {
     // Load posts from localStorage on mount
-    const savedPosts = localStorage.getItem("rxrx_board_posts");
+    const SEED_VERSION = "v2"; // bump this to force reseed
+    const storedVersion = localStorage.getItem("rxrx_board_seed_version");
     
-    if (savedPosts) {
-       try {
-         const parsed = JSON.parse(savedPosts);
-         setPosts(parsed);
-       } catch (e) {
-         console.error("Failed to parse posts from localStorage", e);
-         setPosts(DEFAULT_MOCK_POSTS);
-         localStorage.setItem("rxrx_board_posts", JSON.stringify(DEFAULT_MOCK_POSTS));
-       }
+    if (storedVersion === SEED_VERSION) {
+      // Same version — load user's data
+      const savedPosts = localStorage.getItem("rxrx_board_posts");
+      if (savedPosts) {
+        try {
+          const parsed = JSON.parse(savedPosts);
+          setPosts(parsed);
+        } catch (e) {
+          console.error("Failed to parse posts from localStorage", e);
+          setPosts(DEFAULT_MOCK_POSTS);
+          localStorage.setItem("rxrx_board_posts", JSON.stringify(DEFAULT_MOCK_POSTS));
+        }
+      } else {
+        setPosts(DEFAULT_MOCK_POSTS);
+        localStorage.setItem("rxrx_board_posts", JSON.stringify(DEFAULT_MOCK_POSTS));
+      }
     } else {
-      // First time visit, initialize with mocks
+      // New version — reseed
       setPosts(DEFAULT_MOCK_POSTS);
       localStorage.setItem("rxrx_board_posts", JSON.stringify(DEFAULT_MOCK_POSTS));
+      localStorage.setItem("rxrx_board_seed_version", SEED_VERSION);
     }
     setIsLoaded(true);
   }, []);
