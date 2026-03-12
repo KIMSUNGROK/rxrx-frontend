@@ -1,19 +1,30 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function BoardWritePage() {
+export default function NewsWritePage() {
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [password, setPassword] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const adminStatus = localStorage.getItem("rxrx_admin_logged_in") === "true";
+    if (!adminStatus) {
+      alert("관리자 권한이 필요합니다.");
+      router.push("/news");
+    } else {
+      setIsAdmin(true);
+      setIsLoaded(true);
+    }
+  }, [router]);
 
   const handlePaste = (e: React.ClipboardEvent) => {
     const items = e.clipboardData.items;
-
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.indexOf("image") !== -1) {
         const file = items[i].getAsFile();
@@ -23,7 +34,6 @@ export default function BoardWritePage() {
         const reader = new FileReader();
         reader.onload = (event) => {
           const base64 = event.target?.result as string;
-          // Insert image HTML at current selection or cursor
           document.execCommand("insertImage", false, base64);
         };
         reader.readAsDataURL(file);
@@ -35,46 +45,42 @@ export default function BoardWritePage() {
     e.preventDefault();
 
     const content = editorRef.current?.innerHTML || "";
-    // Check if empty text and no images
     const textContent = editorRef.current?.textContent || "";
 
-    if (!title.trim() || !author.trim() || !password.trim() || (!textContent.trim() && !content.includes("<img"))) {
-      alert("모든 항목(제목, 작성자, 비밀번호, 본문)을 입력해주세요.");
-      return;
-    }
-
-    if (password.length !== 4 || isNaN(Number(password))) {
-      alert("비밀번호는 4자리 숫자로 입력해주세요.");
+    if (!title.trim() || (!textContent.trim() && !content.includes("<img"))) {
+      alert("모든 항목을 입력해주세요.");
       return;
     }
 
     const newPost = {
       id: Date.now(),
       title,
-      author,
-      password,
+      author: "리커전 공식",
       content,
       views: 0,
-      createdAt: new Date().toISOString(),
+      date: new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString()
     };
 
-    const savedPosts = localStorage.getItem("rxrx_board_posts");
+    const savedPosts = localStorage.getItem("rxrx_news_posts");
     const posts = savedPosts ? JSON.parse(savedPosts) : [];
     
     // Add new post to the beginning
     const updatedPosts = [newPost, ...posts];
-    localStorage.setItem("rxrx_board_posts", JSON.stringify(updatedPosts));
+    localStorage.setItem("rxrx_news_posts", JSON.stringify(updatedPosts));
 
-    // Redirect to board
-    router.push("/board");
+    // Redirect to news board
+    router.push("/news");
   };
+
+  if (!isLoaded) return null;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">글쓰기</h1>
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">뉴스 작성</h1>
         <Link 
-          href="/board" 
+          href="/news" 
           className="text-gray-500 hover:text-gray-900 font-medium transition"
         >
           취소
@@ -86,7 +92,7 @@ export default function BoardWritePage() {
           {/* Title row */}
           <div>
             <label htmlFor="title" className="block text-sm font-semibold text-gray-900 mb-2">
-              제목
+              뉴스 제목
             </label>
             <input
               type="text"
@@ -96,37 +102,6 @@ export default function BoardWritePage() {
               className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition font-medium"
               placeholder="제목을 입력하세요"
             />
-          </div>
-
-          {/* Author and Password row */}
-          <div className="flex flex-col sm:flex-row gap-6">
-            <div className="flex-1">
-              <label htmlFor="author" className="block text-sm font-semibold text-gray-900 mb-2">
-                작성자
-              </label>
-              <input
-                type="text"
-                id="author"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition font-medium"
-                placeholder="닉네임"
-              />
-            </div>
-            <div className="flex-1">
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-900 mb-2">
-                비밀번호 (숫자 4자리)
-              </label>
-              <input
-                type="password"
-                id="password"
-                maxLength={4}
-                value={password}
-                onChange={(e) => setPassword(e.target.value.replace(/[^0-9]/g, '').slice(0, 4))}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition font-medium tracking-widest"
-                placeholder="0000"
-              />
-            </div>
           </div>
 
           {/* Editor row */}
@@ -167,7 +142,6 @@ export default function BoardWritePage() {
               <select
                 onChange={(e) => document.execCommand('formatBlock', false, e.target.value)}
                 className="bg-transparent text-sm text-gray-700 py-1 focus:outline-none hover:bg-gray-200 rounded px-1 transition cursor-pointer"
-                title="글자 크기 (제목/본문)"
                 defaultValue="DIV"
               >
                 <option value="DIV">일반 본문</option>
@@ -182,7 +156,6 @@ export default function BoardWritePage() {
                 type="button"
                 onClick={() => document.execCommand('justifyLeft', false, '')}
                 className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
-                title="왼쪽 정렬"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h10M4 18h16" /></svg>
               </button>
@@ -190,7 +163,6 @@ export default function BoardWritePage() {
                 type="button"
                 onClick={() => document.execCommand('justifyCenter', false, '')}
                 className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
-                title="가운데 정렬"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M7 12h10M4 18h16" /></svg>
               </button>
@@ -198,7 +170,6 @@ export default function BoardWritePage() {
                 type="button"
                 onClick={() => document.execCommand('justifyRight', false, '')}
                 className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
-                title="오른쪽 정렬"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M10 12h10M4 18h16" /></svg>
               </button>
@@ -210,7 +181,7 @@ export default function BoardWritePage() {
               onPaste={handlePaste}
               className="w-full border border-gray-300 rounded-b-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition text-gray-700 leading-relaxed min-h-[350px] overflow-y-auto bg-white"
               style={{ outline: "none" }}
-              data-placeholder="여기에 글을 작성하고 이미지를 붙여넣기 할 수 있습니다..."
+              data-placeholder="뉴스 내용을 작성하세요..."
             />
             <style dangerouslySetInnerHTML={{__html: `
               div[contenteditable]:empty:before {
@@ -222,13 +193,12 @@ export default function BoardWritePage() {
             `}} />
           </div>
 
-          {/* Submit button */}
           <div className="pt-4 flex justify-end">
             <button
               type="submit"
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition shadow-sm"
             >
-              등록
+              뉴스 발행
             </button>
           </div>
         </form>

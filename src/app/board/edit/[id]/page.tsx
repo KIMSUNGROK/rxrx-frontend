@@ -1,15 +1,58 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 
-export default function BoardWritePage() {
+interface Post {
+  id: number;
+  title: string;
+  author: string;
+  views: number;
+  content?: string;
+  createdAt?: string;
+  password?: string;
+}
+
+export default function BoardEditPage() {
   const router = useRouter();
+  const params = useParams();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [password, setPassword] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const fetchPost = () => {
+      const savedPosts = localStorage.getItem("rxrx_board_posts");
+      if (savedPosts) {
+        try {
+          const posts: Post[] = JSON.parse(savedPosts);
+          const found = posts.find(p => p.id === Number(params.id));
+          
+          if (found) {
+            setTitle(found.title);
+            setAuthor(found.author);
+            if (editorRef.current) {
+              editorRef.current.innerHTML = found.content || "";
+            }
+          } else {
+            alert("존재하지 않는 게시글입니다.");
+            router.push("/board");
+          }
+        } catch (e) {
+          console.error("Failed to parse posts", e);
+          router.push("/board");
+        }
+      } else {
+        router.push("/board");
+      }
+      setIsLoaded(true);
+    };
+
+    fetchPost();
+  }, [params.id, router]);
 
   const handlePaste = (e: React.ClipboardEvent) => {
     const items = e.clipboardData.items;
@@ -35,46 +78,50 @@ export default function BoardWritePage() {
     e.preventDefault();
 
     const content = editorRef.current?.innerHTML || "";
-    // Check if empty text and no images
     const textContent = editorRef.current?.textContent || "";
 
-    if (!title.trim() || !author.trim() || !password.trim() || (!textContent.trim() && !content.includes("<img"))) {
-      alert("모든 항목(제목, 작성자, 비밀번호, 본문)을 입력해주세요.");
+    if (!title.trim() || !author.trim() || (!textContent.trim() && !content.includes("<img"))) {
+      alert("모든 항목(제목, 작성자, 본문)을 입력해주세요.");
       return;
     }
-
-    if (password.length !== 4 || isNaN(Number(password))) {
-      alert("비밀번호는 4자리 숫자로 입력해주세요.");
-      return;
-    }
-
-    const newPost = {
-      id: Date.now(),
-      title,
-      author,
-      password,
-      content,
-      views: 0,
-      createdAt: new Date().toISOString(),
-    };
 
     const savedPosts = localStorage.getItem("rxrx_board_posts");
-    const posts = savedPosts ? JSON.parse(savedPosts) : [];
-    
-    // Add new post to the beginning
-    const updatedPosts = [newPost, ...posts];
-    localStorage.setItem("rxrx_board_posts", JSON.stringify(updatedPosts));
-
-    // Redirect to board
-    router.push("/board");
+    if (savedPosts) {
+      const posts: Post[] = JSON.parse(savedPosts);
+      const postIndex = posts.findIndex(p => p.id === Number(params.id));
+      
+      if (postIndex !== -1) {
+        // Update the post while keeping unchanged metadata
+        posts[postIndex] = {
+          ...posts[postIndex],
+          title,
+          author,
+          content,
+          // If password is changed, update it. Otherwise keep original
+          password: password.length === 4 ? password : posts[postIndex].password,
+        };
+        
+        localStorage.setItem("rxrx_board_posts", JSON.stringify(posts));
+        alert("게시글이 수정되었습니다.");
+        router.push(`/board/${params.id}`);
+      }
+    }
   };
+
+  if (!isLoaded) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-[500px] flex items-center justify-center">
+        <div className="text-gray-500">로딩 중...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">글쓰기</h1>
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">수정하기</h1>
         <Link 
-          href="/board" 
+          href={`/board/${params.id}`} 
           className="text-gray-500 hover:text-gray-900 font-medium transition"
         >
           취소
@@ -115,7 +162,7 @@ export default function BoardWritePage() {
             </div>
             <div className="flex-1">
               <label htmlFor="password" className="block text-sm font-semibold text-gray-900 mb-2">
-                비밀번호 (숫자 4자리)
+                새 비밀번호 설정 (선택사항, 숫자 4자리)
               </label>
               <input
                 type="password"
@@ -124,7 +171,7 @@ export default function BoardWritePage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value.replace(/[^0-9]/g, '').slice(0, 4))}
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition font-medium tracking-widest"
-                placeholder="0000"
+                placeholder="변경 시 입력"
               />
             </div>
           </div>
@@ -228,7 +275,7 @@ export default function BoardWritePage() {
               type="submit"
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition shadow-sm"
             >
-              등록
+              수정 완료
             </button>
           </div>
         </form>

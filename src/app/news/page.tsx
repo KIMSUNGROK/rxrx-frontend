@@ -1,18 +1,77 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+interface NewsPost {
+  id: number;
+  title: string;
+  author: string;
+  views: number;
+  date: string;
+  content?: string;
+}
+
+const defaultNews: NewsPost[] = [
+  { id: 3, title: "Recursion Pharmaceuticals, 새로운 파트너십 발표", author: "리커전 공식", date: "2024-03-12", views: 1042, content: "새로운 파트너십을 체결했습니다." },
+  { id: 2, title: "RXRX, AI 기반 신약 발굴 플랫폼 업데이트", author: "바이오뉴스", date: "2024-03-10", views: 856, content: "AI 신약 발굴 성과입니다." },
+  { id: 1, title: "NVIDIA와의 파트너십을 통한 컴퓨팅 모델 시연", author: "리커전 공식", date: "2024-03-05", views: 2304, content: "엔비디아 컴퓨팅 모델입니다." },
+];
+
 export default function NewsPage() {
-  // Mock data for the news board
-  const mockNews = [
-    { id: 3, title: "Recursion Pharmaceuticals, 새로운 파트너십 발표", author: "리커전 공식", date: "2024-03-12", views: 1042 },
-    { id: 2, title: "RXRX, AI 기반 신약 발굴 플랫폼 업데이트", author: "바이오뉴스", date: "2024-03-10", views: 856 },
-    { id: 1, title: "NVIDIA와의 파트너십을 통한 컴퓨팅 모델 시연", author: "리커전 공식", date: "2024-03-05", views: 2304 },
-  ];
+  const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [news, setNews] = useState<NewsPost[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem("rxrx_admin_logged_in") === "true");
+
+    const savedNews = localStorage.getItem("rxrx_news_posts");
+    if (savedNews) {
+      try {
+        setNews(JSON.parse(savedNews));
+      } catch (e) {
+        setNews(defaultNews);
+      }
+    } else {
+      setNews(defaultNews);
+      localStorage.setItem("rxrx_news_posts", JSON.stringify(defaultNews));
+    }
+    setIsLoaded(true);
+  }, []);
+
+  const handleNewsClick = (id: number) => {
+    // Increment view count
+    const updatedNews = news.map(post => 
+      post.id === id ? { ...post, views: post.views + 1 } : post
+    );
+    setNews(updatedNews);
+    localStorage.setItem("rxrx_news_posts", JSON.stringify(updatedNews));
+    
+    // Navigate to details
+    router.push(`/news/${id}`);
+  };
+
+  if (!isLoaded) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-[500px]"></div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex justify-between items-end mb-8">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">리커전 뉴스</h1>
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition hidden sm:block">
-          기사 제보하기
-        </button>
+        {isAdmin && (
+          <Link 
+            href="/news/write"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition sm:block"
+          >
+            기사 작성하기
+          </Link>
+        )}
       </div>
 
       <div className="bg-white border border-gray-200 shadow-sm rounded-2xl overflow-hidden">
@@ -28,22 +87,26 @@ export default function NewsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {mockNews.length === 0 ? (
+              {news.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-8 text-center text-gray-500">
                     등록된 뉴스가 없습니다.
                   </td>
                 </tr>
               ) : (
-                mockNews.map((news) => (
-                  <tr key={news.id} className="hover:bg-gray-50 transition cursor-pointer">
-                    <td className="py-4 px-6 text-gray-500 font-medium text-center">{news.id}</td>
+                news.map((item) => (
+                  <tr 
+                    key={item.id} 
+                    onClick={() => handleNewsClick(item.id)}
+                    className="hover:bg-gray-50 transition cursor-pointer"
+                  >
+                    <td className="py-4 px-6 text-gray-500 font-medium text-center">{item.id}</td>
                     <td className="py-4 px-6 text-gray-900 font-semibold hover:text-emerald-600 transition">
-                      {news.title}
+                      {item.title}
                     </td>
-                    <td className="py-4 px-6 text-gray-600 font-medium text-center">{news.author}</td>
-                    <td className="py-4 px-6 text-gray-500 text-center">{news.date}</td>
-                    <td className="py-4 px-6 text-gray-400 text-center">{news.views.toLocaleString()}</td>
+                    <td className="py-4 px-6 text-gray-600 font-medium text-center">{item.author}</td>
+                    <td className="py-4 px-6 text-gray-500 text-center">{item.date}</td>
+                    <td className="py-4 px-6 text-gray-400 text-center">{item.views.toLocaleString()}</td>
                   </tr>
                 ))
               )}
@@ -53,7 +116,7 @@ export default function NewsPage() {
         
         {/* Pagination mock */}
         <div className="bg-gray-50 border-t border-gray-200 px-6 py-4 flex items-center justify-between">
-          <span className="text-sm text-gray-500">총 3개의 뉴스</span>
+          <span className="text-sm text-gray-500">총 {news.length}개의 뉴스</span>
           <div className="flex gap-1">
             <button className="px-3 py-1 border border-gray-200 bg-white text-gray-400 rounded hover:bg-gray-50 disabled:opacity-50" disabled>
               이전
