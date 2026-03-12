@@ -54,12 +54,9 @@ export default async function StockPage() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-16">
-        <ScrollReveal>
-          <div className="text-center mb-16">
-            <span className="font-['DM_Mono'] text-[11px] uppercase tracking-[0.3em] text-[#1a9e96] block mb-4">STOCK OVERVIEW</span>
-            <h2 className="font-['Syne'] text-[36px] font-[700] tracking-[-0.02em] text-[#1a1a2e]">Market Performance</h2>
-          </div>
-        </ScrollReveal>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">주식 분석</h1>
+        </div>
 
         {/* Header */}
         <div className="mb-10 mt-6">
