@@ -59,9 +59,8 @@ export default function BoardPage() {
     setPosts(updatedPosts);
     localStorage.setItem("rxrx_board_posts", JSON.stringify(updatedPosts));
     
-    // In a real app we'd navigate to the post detail page
-    // router.push(`/board/${postId}`);
-    alert("게시글 상세 페이지는 준비 중입니다.");
+    // Navigate to the post detail page
+    router.push(`/board/${postId}`);
   };
 
   // Prevent hydration mismatch by returning empty structure until client loads

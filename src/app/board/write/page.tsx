@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -8,12 +8,36 @@ export default function BoardWritePage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [content, setContent] = useState("");
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData.items;
+
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf("image") !== -1) {
+        const file = items[i].getAsFile();
+        if (!file) continue;
+
+        e.preventDefault();
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64 = event.target?.result as string;
+          // Insert image HTML at current selection or cursor
+          document.execCommand("insertImage", false, base64);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title.trim() || !author.trim() || !content.trim()) {
+    const content = editorRef.current?.innerHTML || "";
+    // Check if empty text and no images
+    const textContent = editorRef.current?.textContent || "";
+
+    if (!title.trim() || !author.trim() || (!textContent.trim() && !content.includes("<img"))) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
@@ -87,14 +111,22 @@ export default function BoardWritePage() {
             <label htmlFor="content" className="block text-sm font-semibold text-gray-900 mb-2">
               본문
             </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={16}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition text-gray-700 leading-relaxed resize-y"
-              placeholder="자유롭게 이야기를 남겨주세요..."
-            ></textarea>
+            <div
+              ref={editorRef}
+              contentEditable
+              onPaste={handlePaste}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition text-gray-700 leading-relaxed min-h-[350px] overflow-y-auto bg-white"
+              style={{ outline: "none" }}
+              data-placeholder="여기에 글을 작성하고 이미지를 붙여넣기 할 수 있습니다..."
+            />
+            <style dangerouslySetInnerHTML={{__html: `
+              div[contenteditable]:empty:before {
+                content: attr(data-placeholder);
+                color: #9ca3af;
+                pointer-events: none;
+                display: block; /* For Firefox */
+              }
+            `}} />
           </div>
 
           {/* Submit button */}
