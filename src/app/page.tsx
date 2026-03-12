@@ -78,15 +78,7 @@ export default async function Home() {
             Mapping and navigating biology to discover extraordinary entirely new medicines through artificial intelligence and massively parallel experiments.
           </p>
 
-          {/* Buttons */}
-          <div className="animate-fade-in-up [animation-delay:800ms] opacity-0 fill-mode-forwards flex flex-col sm:flex-row items-center gap-4">
-            <button className="bg-gradient-primary text-white font-['DM_Mono'] text-[13px] font-medium px-8 py-3.5 rounded-full hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(26,158,150,0.25)] transition-all duration-300 w-full sm:w-auto">
-              Explore Platform
-            </button>
-            <button className="bg-transparent border border-[#1a9e96] text-[#1a9e96] font-['DM_Mono'] text-[13px] font-medium px-8 py-3.5 rounded-full hover:bg-[rgba(26,158,150,0.06)] hover:border-[#137c76] hover:text-[#137c76] transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-2">
-              <span className="text-[10px]">▶</span> Learn How
-            </button>
-          </div>
+
         </div>
 
         {/* Scroll Hint */}
