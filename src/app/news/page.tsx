@@ -11,9 +11,11 @@ interface NewsPost {
   views: number;
   date: string;
   content?: string;
+  isNotice?: boolean;
 }
 
 const defaultNews: NewsPost[] = [
+  { id: 4, title: "배포후 테스트입니다.", author: "관리자", date: new Date().toLocaleDateString("ko-KR"), views: 42, content: "배포 후 테스트 공지글입니다.", isNotice: true },
   { id: 3, title: "Recursion Pharmaceuticals, 새로운 파트너십 발표", author: "리커전 공식", date: "2024-03-12", views: 1042, content: "새로운 파트너십을 체결했습니다." },
   { id: 2, title: "RXRX, AI 기반 신약 발굴 플랫폼 업데이트", author: "바이오뉴스", date: "2024-03-10", views: 856, content: "AI 신약 발굴 성과입니다." },
   { id: 1, title: "NVIDIA와의 파트너십을 통한 컴퓨팅 모델 시연", author: "리커전 공식", date: "2024-03-05", views: 2304, content: "엔비디아 컴퓨팅 모델입니다." },
@@ -99,14 +101,25 @@ export default function NewsPage() {
                   </td>
                 </tr>
               ) : (
-                news.map((item) => (
+                [...news].sort((a, b) => {
+                  if (a.isNotice && !b.isNotice) return -1;
+                  if (!a.isNotice && b.isNotice) return 1;
+                  return b.id - a.id; // secondary sort by ID desc
+                }).map((item) => (
                   <tr 
                     key={item.id} 
                     onClick={() => handleNewsClick(item.id)}
-                    className="hover:bg-gray-50 transition cursor-pointer"
+                    className={`transition cursor-pointer ${item.isNotice ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'}`}
                   >
-                    <td className="py-4 px-6 text-gray-500 font-medium text-center">{item.id}</td>
-                    <td className="py-4 px-6 text-gray-900 font-semibold hover:text-emerald-600 transition">
+                    <td className="py-4 px-6 text-gray-500 font-medium text-center">
+                      {item.isNotice ? (
+                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">공지</span>
+                      ) : (
+                        item.id
+                      )}
+                    </td>
+                    <td className="py-4 px-6 text-gray-900 font-semibold hover:text-emerald-600 transition truncate max-w-xs sm:max-w-md">
+                      {item.isNotice && <span className="text-red-600 font-bold mr-2">[공지]</span>}
                       {item.title}
                     </td>
                     <td className="py-4 px-6 text-gray-700 font-medium text-center">관리자</td>

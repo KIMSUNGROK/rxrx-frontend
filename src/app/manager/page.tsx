@@ -141,6 +141,13 @@ export default function ManagerDashboardPage() {
             <p className="text-gray-500 mt-1">시스템 권한으로 진입했습니다.</p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="px-4 py-2 border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg text-sm font-semibold transition flex items-center gap-2 shadow-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              홈화면으로 이동
+            </Link>
             <a
               href="https://rxrx-backend.onrender.com/docs"
               target="_blank"

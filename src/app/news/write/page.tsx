@@ -10,6 +10,7 @@ export default function NewsWritePage() {
   const [isLoaded, setIsLoaded] = useState(false);
   
   const [title, setTitle] = useState("");
+  const [isNotice, setIsNotice] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,7 +60,8 @@ export default function NewsWritePage() {
       content,
       views: 0,
       date: new Date().toISOString().split('T')[0],
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      isNotice: isNotice
     };
 
     const savedPosts = localStorage.getItem("rxrx_news_posts");
@@ -102,6 +104,20 @@ export default function NewsWritePage() {
               className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition font-medium"
               placeholder="제목을 입력하세요"
             />
+          </div>
+
+          {/* Notice Checkbox Component */}
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="isNotice"
+              checked={isNotice}
+              onChange={(e) => setIsNotice(e.target.checked)}
+              className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500"
+            />
+            <label htmlFor="isNotice" className="ml-2 text-sm font-semibold text-gray-900 cursor-pointer">
+              공지사항으로 등록하기
+            </label>
           </div>
 
           {/* Editor row */}

@@ -12,10 +12,11 @@ interface Post {
   views: number;
   content?: string;
   createdAt?: string;
+  isNotice?: boolean;
 }
 
 const DEFAULT_MOCK_POSTS: Post[] = [
-  { id: 4, title: "배포후 테스트입니다.", author: "관리자", views: 42, createdAt: new Date().toISOString() },
+  { id: 4, title: "배포후 테스트입니다.", author: "관리자", views: 42, createdAt: new Date().toISOString(), isNotice: true },
   { id: 3, title: "RXRX 주가 분석 의견 나눕니다.", author: "주린이", views: 128, createdAt: new Date(Date.now() - 86400000).toISOString() },
   { id: 2, title: "안녕하세요 가입 인사 드립니다~", author: "뉴비즈", views: 56, createdAt: new Date(Date.now() - 172800000).toISOString() },
   { id: 1, title: "Recursion 파이프라인 정리 요약", author: "제약전문가", views: 304, createdAt: new Date(Date.now() - 259200000).toISOString() },
@@ -91,32 +92,46 @@ export default function BoardPage() {
           <table className="w-full text-sm text-left">
             <thead className="bg-gray-50 border-b-2 border-gray-200 text-gray-500">
               <tr>
-                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24">번호</th>
+                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24 text-center">번호</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider">제목</th>
-                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-32 text-center">글쓴이</th>
+                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-32 text-center">작성자</th>
+                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-32 text-center">작성일</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider w-28 text-center">조회수</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {posts.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-12 text-center text-gray-500">
+                  <td colSpan={5} className="py-12 text-center text-gray-500">
                     등록된 게시글이 없습니다. 첫 글을 작성해보세요!
                   </td>
                 </tr>
               ) : (
-                posts.map((post, index) => (
+                [...posts].sort((a, b) => {
+                  if (a.isNotice && !b.isNotice) return -1;
+                  if (!a.isNotice && b.isNotice) return 1;
+                  return b.id - a.id; // secondary sort by ID desc
+                }).map((post) => (
                   <tr 
                     key={post.id} 
                     onClick={() => handlePostClick(post.id)}
-                    className="hover:bg-gray-50 transition cursor-pointer"
+                    className={`transition cursor-pointer ${post.isNotice ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-50'}`}
                   >
-                    {/* Reverse numbering so newest is highest index if we wanted, or just use sequence */}
-                    <td className="py-4 px-6 text-gray-500 font-medium">{posts.length - index}</td>
-                    <td className="py-4 px-6 text-gray-900 font-medium hover:text-emerald-600 transition">
+                    <td className="py-4 px-6 text-gray-500 font-medium text-center">
+                      {post.isNotice ? (
+                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">공지</span>
+                      ) : (
+                        post.id
+                      )}
+                    </td>
+                    <td className="py-4 px-6 text-gray-900 font-medium hover:text-emerald-600 transition truncate max-w-xs sm:max-w-md">
+                      {post.isNotice && <span className="text-red-600 font-bold mr-2">[공지]</span>}
                       {post.title}
                     </td>
                     <td className="py-4 px-6 text-gray-600 text-center">{post.author}</td>
+                    <td className="py-4 px-6 text-gray-500 text-center text-sm">
+                      {post.createdAt ? new Date(post.createdAt).toLocaleDateString("ko-KR") : "ᅳ"}
+                    </td>
                     <td className="py-4 px-6 text-gray-500 text-center">{post.views.toLocaleString()}</td>
                   </tr>
                 ))

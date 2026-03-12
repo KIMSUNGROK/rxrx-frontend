@@ -9,7 +9,13 @@ export default function BoardWritePage() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [password, setPassword] = useState("");
+  const [isNotice, setIsNotice] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsAdmin(localStorage.getItem("rxrx_admin_logged_in") === "true");
+  }, []);
 
   const handlePaste = (e: React.ClipboardEvent) => {
     const items = e.clipboardData.items;
@@ -56,6 +62,7 @@ export default function BoardWritePage() {
       content,
       views: 0,
       createdAt: new Date().toISOString(),
+      isNotice: isAdmin && isNotice,
     };
 
     const savedPosts = localStorage.getItem("rxrx_board_posts");
@@ -128,6 +135,22 @@ export default function BoardWritePage() {
               />
             </div>
           </div>
+          
+          {/* Admin Notice Checkbox */}
+          {isAdmin && (
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="isNotice"
+                checked={isNotice}
+                onChange={(e) => setIsNotice(e.target.checked)}
+                className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500"
+              />
+              <label htmlFor="isNotice" className="ml-2 text-sm font-semibold text-gray-900 cursor-pointer">
+                공지사항으로 등록하기
+              </label>
+            </div>
+          )}
 
           {/* Editor row */}
           <div>
