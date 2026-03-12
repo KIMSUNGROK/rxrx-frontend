@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { fetchDaily, StockPrice } from "@/lib/api";
@@ -154,9 +154,9 @@ export default function ManagerDashboardPage() {
                 </div>
               </div>
             </div>
-            {systemStatus && (
+            {systemStatus && typeof systemStatus === 'object' && 'status' in systemStatus && (
               <div className="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between text-sm">
-                <span className="text-gray-500 font-medium">서비스 상태: <span className="text-emerald-600 font-bold ml-1">{systemStatus.status.toUpperCase()}</span></span>
+                <span className="text-gray-500 font-medium">서비스 상태: <span className="text-emerald-600 font-bold ml-1">{systemStatus.status ? String(systemStatus.status).toUpperCase() : "UNKNOWN"}</span></span>
                 <span className="text-gray-400 text-xs">FastAPI / Yahoo Finance 연결 활성화</span>
               </div>
             )}
@@ -244,10 +244,10 @@ export default function ManagerDashboardPage() {
                        <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
                       {table.table_name}
                     </h3>
-                    <span className="text-xs font-semibold bg-white text-indigo-600 px-2 py-0.5 rounded shadow-sm border border-indigo-100">{table.columns.length} Cols</span>
+                    <span className="text-xs font-semibold bg-white text-indigo-600 px-2 py-0.5 rounded shadow-sm border border-indigo-100">{Array.isArray(table.columns) ? table.columns.length : 0} Cols</span>
                   </div>
                   <ul className="divide-y divide-gray-100">
-                    {table.columns.map((col) => (
+                    {Array.isArray(table.columns) && table.columns.map((col) => (
                       <li key={col.name} className="flex items-center justify-between px-4 py-2 hover:bg-indigo-50/50 transition-colors">
                         <span className="text-sm font-medium text-gray-700">{col.name}</span>
                         <span className="text-xs text-gray-400 bg-white px-1.5 py-0.5 rounded border border-gray-200 font-mono">{col.type}</span>
