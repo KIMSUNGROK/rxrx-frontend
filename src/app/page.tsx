@@ -209,35 +209,6 @@ export default async function Home() {
         </h2>
         <StockTable data={dailyData} />
       </div>
-
-      {/* Data Stats */}
-      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
-        <h3 className="text-gray-900 font-bold mb-4 tracking-tight">데이터 요약</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <p className="text-gray-500 font-medium">총 레코드 수</p>
-            <p className="text-gray-900 font-semibold">{dailyData.length}</p>
-          </div>
-          <div>
-            <p className="text-gray-500 font-medium">최초 데이터 일자</p>
-            <p className="text-gray-900 font-semibold">
-              {dailyData.length > 0 ? dailyData[0].trade_date : "—"}
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-500 font-medium">최근 데이터 일자</p>
-            <p className="text-gray-900 font-semibold">
-              {dailyData.length > 0
-                ? dailyData[dailyData.length - 1].trade_date
-                : "—"}
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-500 font-medium">API 상태</p>
-            <p className="text-emerald-600 font-semibold">● 정상 연결됨</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

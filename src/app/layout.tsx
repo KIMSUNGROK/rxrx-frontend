@@ -21,15 +21,6 @@ function Navbar() {
             <Link href="/" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">홈</Link>
             <Link href="/news" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">리커전 뉴스</Link>
             <Link href="/board" className="text-gray-600 hover:text-gray-900 text-sm font-medium transition">자유게시판</Link>
-            <a
-              href="https://rxrx-backend.onrender.com/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 text-sm font-medium transition flex items-center gap-1"
-            >
-              API 문서 
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-            </a>
           </div>
         </div>
       </div>
@@ -43,7 +34,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
         <p>리커전 파마슈티컬스 한국인 투자자 커뮤니티 &copy; {new Date().getFullYear()}</p>
         <p className="mt-2 text-gray-400">
-          Powered by Next.js + FastAPI + Supabase | Data from Yahoo Finance
+          관리자 문의 : futurisme@kakao.com
         </p>
       </div>
     </footer>
