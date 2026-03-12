@@ -5,7 +5,7 @@ import { StockPrice } from "@/lib/api";
 
 export default function StockTable({ data }: { data: StockPrice[] }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 30;
+  const itemsPerPage = 10;
   if (!data || data.length === 0) {
     return <p className="text-gray-500 text-center py-8">사용 가능한 데이터가 없습니다</p>;
   }
