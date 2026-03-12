@@ -111,11 +111,81 @@ export default function BoardWritePage() {
             <label htmlFor="content" className="block text-sm font-semibold text-gray-900 mb-2">
               본문
             </label>
+            
+            {/* WYSIWYG Editor Toolbar */}
+            <div className="flex flex-wrap items-center gap-1 bg-gray-50 border border-gray-300 border-b-0 rounded-t-lg px-3 py-2">
+              <button
+                type="button"
+                onClick={() => document.execCommand('bold', false, '')}
+                className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
+                title="굵게"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" /></svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.execCommand('italic', false, '')}
+                className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
+                title="기울임"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4-4-4-4M6 16l-4 4 4 4" /></svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.execCommand('underline', false, '')}
+                className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
+                title="밑줄"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 3v7a6 6 0 006 6 6 6 0 006-6V3m-9 18h6" /></svg>
+              </button>
+              
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+              
+              <select
+                onChange={(e) => document.execCommand('formatBlock', false, e.target.value)}
+                className="bg-transparent text-sm text-gray-700 py-1 focus:outline-none hover:bg-gray-200 rounded px-1 transition cursor-pointer"
+                title="글자 크기 (제목/본문)"
+                defaultValue="DIV"
+              >
+                <option value="DIV">일반 본문</option>
+                <option value="H1">제목 1</option>
+                <option value="H2">제목 2</option>
+                <option value="H3">제목 3</option>
+              </select>
+
+              <div className="w-px h-6 bg-gray-300 mx-1"></div>
+
+              <button
+                type="button"
+                onClick={() => document.execCommand('justifyLeft', false, '')}
+                className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
+                title="왼쪽 정렬"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h10M4 18h16" /></svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.execCommand('justifyCenter', false, '')}
+                className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
+                title="가운데 정렬"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M7 12h10M4 18h16" /></svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.execCommand('justifyRight', false, '')}
+                className="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition"
+                title="오른쪽 정렬"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M10 12h10M4 18h16" /></svg>
+              </button>
+            </div>
+
             <div
               ref={editorRef}
               contentEditable
               onPaste={handlePaste}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition text-gray-700 leading-relaxed min-h-[350px] overflow-y-auto bg-white"
+              className="w-full border border-gray-300 rounded-b-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition text-gray-700 leading-relaxed min-h-[350px] overflow-y-auto bg-white"
               style={{ outline: "none" }}
               data-placeholder="여기에 글을 작성하고 이미지를 붙여넣기 할 수 있습니다..."
             />
