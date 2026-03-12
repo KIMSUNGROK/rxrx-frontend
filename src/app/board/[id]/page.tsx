@@ -103,6 +103,13 @@ export default function PostDetailPage() {
       }) 
     : "날짜 정보 없음";
 
+  // Auto-link bare URLs in the HTML content, avoiding existing hrefs
+  const autoLinkText = (htmlContent: string) => {
+    // Regex matches http/https URLs not preceded by href=" or src="
+    const urlRegex = /(?<!href="|src=")(https?:\/\/[^\s<]+)/g;
+    return htmlContent.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline hover:text-indigo-800 transition">$1</a>');
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Header section with back button */}
@@ -160,7 +167,7 @@ export default function PostDetailPage() {
             <div 
               className="prose prose-emerald max-w-none text-gray-800"
               style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: autoLinkText(post.content) }}
             />
           ) : (
             <p className="text-gray-500 italic">내용이 없습니다.</p>

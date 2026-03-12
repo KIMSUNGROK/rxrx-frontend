@@ -196,9 +196,14 @@ export default async function Home() {
 
       {/* TradingView Chart */}
       <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">
-          RXRX 차트 (NASDAQ)
-        </h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-bold text-gray-900 tracking-tight">
+            RXRX 차트 (NASDAQ)
+          </h2>
+          <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+            데이터 갱신주기: 1시간
+          </span>
+        </div>
         <TradingViewWidget />
       </div>
 

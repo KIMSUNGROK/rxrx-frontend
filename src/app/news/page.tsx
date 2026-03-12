@@ -64,14 +64,18 @@ export default function NewsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex justify-between items-end mb-8">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">리커전 뉴스</h1>
-        {isAdmin && (
-          <Link 
-            href="/news/write"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition sm:block"
-          >
-            기사 작성하기
-          </Link>
-        )}
+        <button 
+          onClick={() => {
+            if (isAdmin) {
+              router.push("/news/write");
+            } else {
+              alert("관리자만 등록 가능합니다.");
+            }
+          }}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition sm:block"
+        >
+          기사 작성하기
+        </button>
       </div>
 
       <div className="bg-white border border-gray-200 shadow-sm rounded-2xl overflow-hidden">
@@ -81,15 +85,16 @@ export default function NewsPage() {
               <tr>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24 text-center">번호</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider">주요 소식</th>
+                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-32 text-center">작성자</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider w-32 text-center">출처</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider w-28 text-center">작성일</th>
-                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24 text-center">조회</th>
+                <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24 text-center">조회수</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {news.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-gray-500">
+                  <td colSpan={6} className="py-8 text-center text-gray-500">
                     등록된 뉴스가 없습니다.
                   </td>
                 </tr>
@@ -104,7 +109,8 @@ export default function NewsPage() {
                     <td className="py-4 px-6 text-gray-900 font-semibold hover:text-emerald-600 transition">
                       {item.title}
                     </td>
-                    <td className="py-4 px-6 text-gray-600 font-medium text-center">{item.author}</td>
+                    <td className="py-4 px-6 text-gray-700 font-medium text-center">관리자</td>
+                    <td className="py-4 px-6 text-gray-600 text-center">{item.author}</td>
                     <td className="py-4 px-6 text-gray-500 text-center">{item.date}</td>
                     <td className="py-4 px-6 text-gray-400 text-center">{item.views.toLocaleString()}</td>
                   </tr>
