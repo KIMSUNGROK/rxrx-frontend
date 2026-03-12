@@ -78,27 +78,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 3. MISSION SECTION */}
-      <section className="bg-[#f8f8fa] py-32 relative z-10" id="platform">
-        <ScrollReveal>
-          <div className="max-w-[760px] mx-auto px-6 text-center">
-            <span className="font-['DM_Mono'] text-[11px] uppercase tracking-[0.3em] text-[#1a9e96] block mb-6">OUR MISSION</span>
-            <h2 className="font-['Syne'] text-[clamp(26px,3.5vw,44px)] font-[700] tracking-[-0.02em] text-[#1a1a2e] leading-[1.15] mb-8">
-              Decoding biology to rapidly discover <br />
-              <span className="text-gradient-expanded">novel insights</span> and treatments.
-            </h2>
-            <div className="font-['DM_Mono'] text-[13.5px] text-[#6b7280] leading-[1.85] space-y-6 max-w-2xl mx-auto">
-              <p>
-                By treating drug discovery as an engineering problem rather than a scientific one, we leverage our proprietary automated wet labs alongside vast computational power.
-              </p>
-              <p>
-                This industrialized approach allows us to map the precise relationships between millions of biological perturbations, transforming the search for medicines from trial-and-error to a predictive science.
-              </p>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
-
 
       {/* Global utility animation classes appended dynamically */}
       <style dangerouslySetInnerHTML={{__html: `
