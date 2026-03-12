@@ -94,7 +94,7 @@ export default async function StockPage() {
         </div>
 
         {/* Detailed Stock Info Grid */}
-        <div className="bg-white/80 backdrop-blur-sm border border-[rgba(0,0,0,0.04)] rounded-2xl px-6 py-8 mb-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+        <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl px-6 py-8 mb-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-8 text-sm">
             {/* Row 1 */}
             <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -191,7 +191,7 @@ export default async function StockPage() {
         </div>
 
         {/* TradingView Chart */}
-        <div className="bg-white/80 backdrop-blur-sm border border-[rgba(0,0,0,0.04)] shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
+        <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] tracking-[-0.01em]">
               RXRX 차트 (NASDAQ)
@@ -204,7 +204,7 @@ export default async function StockPage() {
         </div>
 
         {/* Recent Prices Table */}
-        <div className="bg-white/80 backdrop-blur-sm border border-[rgba(0,0,0,0.04)] shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
+        <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
           <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
             최근 주가 데이터
           </h2>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ParticleBackground from "@/components/ParticleBackgroundWrapper";
 import { fetchDaily, StockPrice } from "@/lib/api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://rxrx-backend.onrender.com";
@@ -133,7 +134,13 @@ export default function ManagerDashboardPage() {
 
   if (isLoggedIn) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen flex flex-col">
+      <div className="relative min-h-screen">
+      <div className="absolute inset-0 h-[420px] overflow-hidden pointer-events-none">
+        <ParticleBackground />
+        <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute bottom-0 left-0 right-0 h-[200px] hero-bottom-fade" />
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-16 min-h-screen flex flex-col">
         {/* Dashboard Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
           <div>
@@ -210,7 +217,7 @@ export default function ManagerDashboardPage() {
         {/* Analytics Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Data Stats Widget */}
-          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 sm:p-8">
+          <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-sm rounded-2xl p-6 sm:p-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
                 <svg className="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
@@ -258,7 +265,7 @@ export default function ManagerDashboardPage() {
           </div>
 
           {/* Visitor Statistics Graph (Real DB Data) */}
-          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 sm:p-8 flex flex-col">
+          <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-sm rounded-2xl p-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
                 <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -295,12 +302,19 @@ export default function ManagerDashboardPage() {
           </div>
         </div>
       </div>
+      </div>
     );
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-20 flex flex-col justify-center min-h-[60vh]">
-      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-8 sm:p-10">
+    <div className="relative min-h-screen">
+      <div className="absolute inset-0 h-[600px] overflow-hidden pointer-events-none">
+        <ParticleBackground />
+        <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute bottom-0 left-0 right-0 h-[200px] hero-bottom-fade" />
+      </div>
+    <div className="relative z-10 max-w-md mx-auto px-4 py-20 flex flex-col justify-center min-h-[60vh]">
+      <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-sm rounded-2xl p-8 sm:p-10">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">관리자 로그인</h1>
           <p className="text-gray-500 text-sm mt-2">시스템 관리자용 접속 페이지입니다.</p>
@@ -349,6 +363,7 @@ export default function ManagerDashboardPage() {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 }
