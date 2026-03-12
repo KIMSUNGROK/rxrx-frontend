@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { name: "News", path: "/news" },
   { name: "Board", path: "/board" },
   { name: "Platform", path: "#platform" },
-  { name: "Pipeline", path: "#pipeline" },
+  { name: "Pipeline", path: "/pipeline" },
 ];
 
 export default function Navbar() {
