@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ParticleBackground from "@/components/ParticleBackgroundWrapper";
 
 // Define the post type
 interface Post {
@@ -76,7 +77,13 @@ export default function BoardPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="relative min-h-screen">
+      <div className="absolute inset-0 h-[420px] overflow-hidden pointer-events-none">
+        <ParticleBackground />
+        <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute bottom-0 left-0 right-0 h-[200px] hero-bottom-fade" />
+      </div>
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-16">
       <div className="flex justify-between items-end mb-8">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">자유게시판</h1>
         <Link 
@@ -158,6 +165,7 @@ export default function BoardPage() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }
