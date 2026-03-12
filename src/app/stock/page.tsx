@@ -1,5 +1,4 @@
 import ParticleBackground from "@/components/ParticleBackgroundWrapper";
-import ScrollReveal from "@/components/ScrollReveal";
 import { fetchLatest, fetchDaily, LatestPrice, StockPrice } from "@/lib/api";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import StockTable from "@/components/StockTable";
@@ -58,19 +57,17 @@ export default async function StockPage() {
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight">주식 분석</h1>
         </div>
 
-        {/* Header */}
-        <div className="mb-10 mt-6">
-          <div className="flex justify-between items-end">
-            <div className="flex items-baseline gap-3">
-              <h1 className="font-['Syne'] text-[36px] font-[800] text-[#1a1a2e] tracking-[-0.02em]">RXRX</h1>
-              <span className="font-['DM_Mono'] text-[14px] text-[#8895a7]">Recursion Pharmaceuticals</span>
-              <span className="bg-[rgba(26,158,150,0.08)] text-[#1a9e96] border border-[rgba(26,158,150,0.15)] font-['DM_Mono'] text-[10px] px-2.5 py-1 rounded-full font-medium uppercase tracking-wider">
-                NASDAQ
-              </span>
-            </div>
+        {/* RXRX Header */}
+        <div className="mb-8">
+          <div className="flex items-baseline gap-3 flex-wrap">
+            <h1 className="font-['Syne'] text-[36px] font-[800] text-[#1a1a2e] tracking-[-0.02em]">RXRX</h1>
+            <span className="font-['DM_Mono'] text-[14px] text-[#8895a7]">Recursion Pharmaceuticals</span>
+            <span className="bg-[rgba(26,158,150,0.08)] text-[#1a9e96] border border-[rgba(26,158,150,0.15)] font-['DM_Mono'] text-[10px] px-2.5 py-1 rounded-full font-medium uppercase tracking-wider">
+              NASDAQ
+            </span>
           </div>
           {latest && (
-            <div className="flex items-baseline gap-3 mt-4">
+            <div className="flex items-baseline gap-3 mt-4 flex-wrap">
               <span className="font-['Syne'] text-[48px] font-[800] text-[#1a1a2e] tracking-[-0.02em]">
                 ${latest.close?.toFixed(2)}
               </span>
@@ -90,8 +87,52 @@ export default async function StockPage() {
           )}
         </div>
 
-        {/* Detailed Stock Info Grid */}
+        {/* Chart (Left) + Recent Prices (Right) */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 mb-8">
+          {/* TradingView Chart */}
+          <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] tracking-[-0.01em]">
+                RXRX 차트 (NASDAQ)
+              </h2>
+              <span className="font-['DM_Mono'] text-[10px] font-medium px-2.5 py-1 bg-[rgba(26,158,150,0.08)] text-[#1a9e96] border border-[rgba(26,158,150,0.12)] rounded-full tracking-wider">
+                데이터 갱신주기: 1시간
+              </span>
+            </div>
+            <TradingViewWidget />
+          </div>
+
+          {/* Recent Prices - Vertical Sidebar */}
+          <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-5 overflow-hidden">
+            <h2 className="font-['Syne'] text-[16px] font-[700] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
+              최근 주가 데이터
+            </h2>
+            <div className="overflow-y-auto max-h-[520px] pr-1 custom-scrollbar">
+              <table className="w-full text-xs">
+                <thead className="sticky top-0 bg-white/90 backdrop-blur-sm">
+                  <tr className="border-b border-gray-200/60">
+                    <th className="text-left py-2 font-semibold text-gray-500 uppercase tracking-wider">일자</th>
+                    <th className="text-right py-2 font-semibold text-gray-500 uppercase tracking-wider">종가</th>
+                    <th className="text-right py-2 font-semibold text-gray-500 uppercase tracking-wider">거래량</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dailyData.slice(-30).reverse().map((d, i) => (
+                    <tr key={i} className="border-b border-gray-50 hover:bg-white/50 transition-colors">
+                      <td className="py-2 text-gray-600 font-['DM_Mono']">{d.trade_date}</td>
+                      <td className="py-2 text-right font-semibold text-[#1a9e96] font-['DM_Mono']">${d.close.toFixed(2)}</td>
+                      <td className="py-2 text-right text-gray-500 font-['DM_Mono']">{d.volume.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Detailed Stock Info Grid - Full Width Below */}
         <div className="bg-white/70 backdrop-blur-sm border border-white/40 rounded-2xl px-6 py-8 mb-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+          <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] mb-6 tracking-[-0.01em]">종목 상세 정보</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-8 text-sm">
             {/* Row 1 */}
             <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -185,27 +226,6 @@ export default async function StockPage() {
               <span className="font-semibold text-gray-900">N/A</span>
             </div>
           </div>
-        </div>
-
-        {/* TradingView Chart */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] tracking-[-0.01em]">
-              RXRX 차트 (NASDAQ)
-            </h2>
-            <span className="font-['DM_Mono'] text-[10px] font-medium px-2.5 py-1 bg-[rgba(26,158,150,0.08)] text-[#1a9e96] border border-[rgba(26,158,150,0.12)] rounded-full tracking-wider">
-              데이터 갱신주기: 1시간
-            </span>
-          </div>
-          <TradingViewWidget />
-        </div>
-
-        {/* Recent Prices Table */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
-          <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
-            최근 주가 데이터
-          </h2>
-          <StockTable data={dailyData} />
         </div>
       </div>
     </div>
