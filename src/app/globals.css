@@ -3,7 +3,7 @@
 :root {
   --background: #f8f8fa;
   --foreground: #1a1a2e;
-  
+
   /* Brand Colors */
   --deep-teal: #1a9e96;
   --ocean-blue: #2d7dd2;
@@ -24,6 +24,11 @@
   /* Backgrounds */
   --bg-main: #f8f8fa;
   --bg-white: #ffffff;
+  --bg-dark: #0a0a0a;
+  --bg-dark-alt: #111111;
+
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {
@@ -31,45 +36,104 @@ body {
   color: var(--foreground);
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
-}
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f8f8fa; }
+::-webkit-scrollbar-thumb { background: rgba(26, 158, 150, 0.18); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(26, 158, 150, 0.35); }
 
-::-webkit-scrollbar-track {
-  background: #f8f8fa;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(26, 158, 150, 0.18);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(26, 158, 150, 0.35);
-}
-
-/* Utilities */
+/* ===== Gradient Text ===== */
 .text-gradient-primary {
   background: linear-gradient(135deg, #1a9e96, #2d7dd2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .text-gradient-expanded {
   background: linear-gradient(135deg, #1a9e96 0%, #2d7dd2 50%, #6c5ce7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
+/* ===== Gradient Backgrounds ===== */
 .bg-gradient-primary {
   background: linear-gradient(135deg, #1a9e96, #2d7dd2);
 }
 
+/* ===== Hero Overlays ===== */
 .hero-vignette {
   background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(248,248,250,0.5) 75%, rgba(248,248,250,0.95) 100%);
 }
-
 .hero-bottom-fade {
   background: linear-gradient(to top, #f8f8fa, transparent);
+}
+
+/* ===== Footer Dark ===== */
+.footer-dark {
+  background: linear-gradient(180deg, #0d0d0d 0%, #080808 100%);
+  position: relative;
+}
+.footer-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(26, 158, 150, 0.4), rgba(45, 125, 210, 0.4), transparent);
+}
+
+/* ===== Phase Bar Shimmer ===== */
+.phase-bar {
+  position: relative;
+  overflow: hidden;
+}
+.phase-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  animation: phase-shimmer 2.5s ease-in-out infinite;
+}
+@keyframes phase-shimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ===== Animations ===== */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-down {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up { animation: fade-in-up 0.9s var(--ease-out-expo); }
+.animate-slide-down { animation: slide-down 0.35s var(--ease-out-expo) forwards; }
+.fill-mode-forwards { animation-fill-mode: forwards; }
+
+/* ===== Mobile Menu ===== */
+.mobile-menu-panel {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Card Hover Glow ===== */
+.card-hover-glow {
+  transition: all 0.5s var(--ease-out-expo);
+}
+.card-hover-glow:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06), 0 0 30px rgba(26, 158, 150, 0.06);
+  transform: translateY(-3px);
+  border-color: rgba(26, 158, 150, 0.08);
 }

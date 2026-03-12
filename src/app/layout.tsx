@@ -23,10 +23,13 @@ export const metadata: Metadata = {
 
 function Footer() {
   return (
-    <footer className="border-t border-gray-200 bg-gray-50 py-8 mt-auto z-10 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm font-mono">
-        <p>리커전 파마슈티컬스 한국인 투자자 커뮤니티 &copy; {new Date().getFullYear()}</p>
-        <p className="mt-2 text-gray-400">
+    <footer className="footer-dark py-14 mt-auto z-10 relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="w-12 h-[2px] bg-gradient-to-r from-[#1a9e96] to-[#2d7dd2] mx-auto mb-8 rounded-full" />
+        <p className="font-['DM_Mono'] text-[13px] text-white/45 tracking-wide">
+          리커전 파마슈티컬스 한국인 투자자 커뮤니티 &copy; {new Date().getFullYear()}
+        </p>
+        <p className="mt-3 font-['DM_Mono'] text-[11px] text-white/25">
           관리자 문의 : futurisme@kakao.com
         </p>
       </div>

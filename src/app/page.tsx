@@ -1,14 +1,9 @@
-import dynamic from "next/dynamic";
+import ParticleBackground from "@/components/ParticleBackgroundWrapper";
 import ScrollReveal from "@/components/ScrollReveal";
 import CountUp from "@/components/CountUp";
 import { fetchLatest, fetchDaily, LatestPrice, StockPrice } from "@/lib/api";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import StockTable from "@/components/StockTable";
-
-// Load Three.js background dynamically to avoid SSR issues
-const ParticleBackground = dynamic(() => import("@/components/ParticleBackground"), {
-  ssr: false,
-});
 
 export const revalidate = 60;
 
@@ -197,7 +192,7 @@ export default async function Home() {
                     <div className="w-full mt-2 md:mt-0 relative">
                       <div className="w-full h-[5px] bg-gray-100 rounded-full overflow-hidden">
                         <div 
-                          className="h-full rounded-full transition-all duration-1000 ease-out" 
+                          className="h-full rounded-full transition-all duration-1000 ease-out phase-bar" 
                           style={{ 
                             width: `${item.progress}%`, 
                             backgroundColor: item.color,
@@ -246,7 +241,7 @@ export default async function Home() {
               }
             ].map((card, i) => (
               <ScrollReveal key={i} delay={i * 100}>
-                <div className="bg-white rounded-[6px] p-8 border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)] hover:-translate-y-[3px] transition-all duration-300 group">
+                <div className="bg-white rounded-xl p-8 border border-[rgba(0,0,0,0.04)] shadow-[0_2px_10px_rgba(0,0,0,0.02)] card-hover-glow group">
                   <div 
                     className="text-[28px] mb-5 transition-colors"
                     style={{ color: '#8895a7' }}
@@ -277,16 +272,16 @@ export default async function Home() {
           <div className="mb-10 mt-6">
             <div className="flex justify-between items-end">
               <div className="flex items-baseline gap-3">
-                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">RXRX</h1>
-                <span className="text-gray-500 text-xl font-medium">Recursion Pharmaceuticals</span>
-                <span className="bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2.5 py-1 rounded-full font-semibold">
+                <h1 className="font-['Syne'] text-[36px] font-[800] text-[#1a1a2e] tracking-[-0.02em]">RXRX</h1>
+                <span className="font-['DM_Mono'] text-[14px] text-[#8895a7]">Recursion Pharmaceuticals</span>
+                <span className="bg-[rgba(26,158,150,0.08)] text-[#1a9e96] border border-[rgba(26,158,150,0.15)] font-['DM_Mono'] text-[10px] px-2.5 py-1 rounded-full font-medium uppercase tracking-wider">
                   NASDAQ
                 </span>
               </div>
             </div>
             {latest && (
               <div className="flex items-baseline gap-3 mt-4">
-                <span className="text-5xl font-bold text-gray-900 tracking-tight">
+                <span className="font-['Syne'] text-[48px] font-[800] text-[#1a1a2e] tracking-[-0.02em]">
                   ${latest.close?.toFixed(2)}
                 </span>
                 <span className={`text-2xl font-semibold ${changeColor}`}>
@@ -298,7 +293,7 @@ export default async function Home() {
                     ({changeSign}${Math.abs(latest.change).toFixed(2)})
                   </span>
                 )}
-                <span className="text-gray-400 text-sm font-medium ml-2">
+                <span className="font-['DM_Mono'] text-[11px] text-[#aab0bc] ml-3">
                   {latest.trade_date} 기준
                 </span>
               </div>
@@ -306,7 +301,7 @@ export default async function Home() {
           </div>
 
           {/* Detailed Stock Info Grid */}
-          <div className="bg-white border border-gray-200 rounded-2xl px-6 py-8 mb-8 shadow-sm">
+          <div className="bg-white/80 backdrop-blur-sm border border-[rgba(0,0,0,0.04)] rounded-2xl px-6 py-8 mb-8 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 gap-x-8 text-sm">
               {/* Row 1 */}
               <div className="flex justify-between border-b border-gray-100 pb-2">
@@ -403,12 +398,12 @@ export default async function Home() {
           </div>
 
           {/* TradingView Chart */}
-          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 mb-8">
+          <div className="bg-white/80 backdrop-blur-sm border border-[rgba(0,0,0,0.04)] shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-gray-900 tracking-tight">
+              <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] tracking-[-0.01em]">
                 RXRX 차트 (NASDAQ)
               </h2>
-              <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+              <span className="font-['DM_Mono'] text-[10px] font-medium px-2.5 py-1 bg-[rgba(26,158,150,0.08)] text-[#1a9e96] border border-[rgba(26,158,150,0.12)] rounded-full tracking-wider">
                 데이터 갱신주기: 1시간
               </span>
             </div>
@@ -416,8 +411,8 @@ export default async function Home() {
           </div>
 
           {/* Recent Prices Table */}
-          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 mb-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">
+          <div className="bg-white/80 backdrop-blur-sm border border-[rgba(0,0,0,0.04)] shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl p-6 mb-8">
+            <h2 className="font-['Syne'] text-[18px] font-[700] text-[#1a1a2e] mb-4 tracking-[-0.01em]">
               최근 주가 데이터
             </h2>
             <StockTable data={dailyData} />
