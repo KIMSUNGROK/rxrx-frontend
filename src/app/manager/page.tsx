@@ -48,7 +48,11 @@ export default function ManagerDashboardPage() {
       setId(cachedAdminId); // Keep ID in state for password change
       
       fetchDaily(200).then(res => {
-        setDailyData(res.data || []);
+        if (res.status === 'success' && res.data) {
+          setDailyData(res.data);
+        } else {
+          setDailyData([]);
+        }
       }).catch(err => {
         console.error("Failed to fetch daily data for admin dashboard", err);
       });
@@ -57,16 +61,6 @@ export default function ManagerDashboardPage() {
       fetch(`${API_BASE}/api/v1/system/status`)
         .then(res => res.json())
         .then(data => setSystemStatus(data))
-        .catch(console.error);
-
-      // Fetch DB Schema
-      fetch(`${API_BASE}/api/v1/system/schema`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === "success") {
-            setDbSchema(data.data);
-          }
-        })
         .catch(console.error);
 
       // Fetch Visitor Stats
@@ -284,43 +278,6 @@ export default function ManagerDashboardPage() {
               <p className="text-sm text-gray-500">누적 총 접속자: <strong className="text-gray-900 border-b border-gray-400 pb-0.5">{visitorStats.total.toLocaleString()}</strong>명</p>
             </div>
           </div>
-        </div>
-
-        {/* Database Schema Map */}
-        <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 sm:p-8 mb-8">
-          <div className="flex items-center gap-2 mb-6">
-            <svg className="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
-            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Supabase 데이터베이스 스키마 맵 (실시간)</h2>
-          </div>
-          
-          {dbSchema.length === 0 ? (
-            <div className="text-center py-10 bg-gray-50 rounded-xl border border-gray-100 border-dashed">
-              <div className="w-8 h-8 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin mx-auto mb-3"></div>
-              <p className="text-gray-500 font-medium text-sm">Supabase OpenAPI 구성 정보를 불러오는 중...</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {dbSchema.map((table) => (
-                <div key={table.table_name} className="bg-gray-50 border border-gray-200 rounded-xl overflow-hidden hover:border-indigo-300 transition-colors shadow-sm">
-                  <div className="bg-indigo-50 border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-                    <h3 className="font-bold text-indigo-900 text-sm tracking-tight flex items-center gap-2">
-                       <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
-                      {table.table_name}
-                    </h3>
-                    <span className="text-xs font-semibold bg-white text-indigo-600 px-2 py-0.5 rounded shadow-sm border border-indigo-100">{Array.isArray(table.columns) ? table.columns.length : 0} Cols</span>
-                  </div>
-                  <ul className="divide-y divide-gray-100">
-                    {Array.isArray(table.columns) && table.columns.map((col) => (
-                      <li key={col.name} className="flex items-center justify-between px-4 py-2 hover:bg-indigo-50/50 transition-colors">
-                        <span className="text-sm font-medium text-gray-700">{col.name}</span>
-                        <span className="text-xs text-gray-400 bg-white px-1.5 py-0.5 rounded border border-gray-200 font-mono">{col.type}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Footer Area inside Dashboard */}
