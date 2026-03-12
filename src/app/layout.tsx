@@ -41,6 +41,8 @@ function Footer() {
   );
 }
 
+import VisitorTracker from "@/components/VisitorTracker";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -49,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-white text-gray-900 min-h-screen flex flex-col antialiased font-sans selection:bg-gray-200">
+        <VisitorTracker />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

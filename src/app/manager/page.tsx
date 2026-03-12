@@ -28,11 +28,25 @@ export default function ManagerDashboardPage() {
   const [systemStatus, setSystemStatus] = useState<any>(null);
   const [dbSchema, setDbSchema] = useState<TableDef[]>([]);
 
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState("");
+  
+  const [visitorStats, setVisitorStats] = useState({ 
+    daily: 0, weekly: 0, monthly: 0, yearly: 0, total: 0 
+  });
+  const [activeTab, setActiveTab] = useState('daily');
+
   useEffect(() => {
     setIsClient(true);
     
     // Fetch dashboard data if logged in
-    if (localStorage.getItem("rxrx_admin_logged_in") === "true") {
+    const cachedAdmin = localStorage.getItem("rxrx_admin_logged_in");
+    const cachedAdminId = localStorage.getItem("rxrx_admin_id");
+    if (cachedAdmin === "true" && cachedAdminId) {
+      setId(cachedAdminId); // Keep ID in state for password change
+      
       fetchDaily(200).then(res => {
         setDailyData(res.data || []);
       }).catch(err => {
@@ -54,24 +68,69 @@ export default function ManagerDashboardPage() {
           }
         })
         .catch(console.error);
+
+      // Fetch Visitor Stats
+      fetch(`${API_BASE}/api/v1/visitors/stats`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "success" && data.data) {
+            setVisitorStats(data.data);
+          }
+        })
+        .catch(console.error);
     }
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (id === "manager" && password === "manager") {
-      localStorage.setItem("rxrx_admin_logged_in", "true");
-      alert("관리자로 로그인되었습니다.");
-      window.location.reload();
-    } else {
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, password })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.status === "success") {
+        localStorage.setItem("rxrx_admin_logged_in", "true");
+        localStorage.setItem("rxrx_admin_id", id);
+        alert("관리자로 로그인되었습니다.");
+        window.location.reload();
+      } else {
+        setError(data.detail || "아이디 또는 비밀번호가 올바르지 않습니다.");
+      }
+    } catch (err) {
+      setError("로그인 처리 중 오류가 발생했습니다.");
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem("rxrx_admin_logged_in");
+    localStorage.removeItem("rxrx_admin_id");
     alert("로그아웃 되었습니다.");
     window.location.reload();
+  };
+  
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordMsg("");
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/admin/change-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, current_password: currentPassword, new_password: newPassword })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.status === "success") {
+        alert("비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요.");
+        handleLogout();
+      } else {
+        setPasswordMsg(data.detail || "오류가 발생했습니다.");
+      }
+    } catch (err) {
+      setPasswordMsg("비밀번호 변경 처리 중 서버 통신 오류가 발생했습니다.");
+    }
   };
 
   if (!isClient) return null;
@@ -97,12 +156,12 @@ export default function ManagerDashboardPage() {
               API 문서
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             </a>
-            <Link 
-              href="/" 
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition shadow-sm"
+            <button 
+              onClick={() => setShowPasswordModal(true)}
+              className="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-sm font-semibold transition shadow-sm"
             >
-              홈으로
-            </Link>
+              비밀번호 변경
+            </button>
             <button 
               onClick={handleLogout}
               className="px-4 py-2 bg-gray-900 hover:bg-black text-white rounded-lg text-sm font-semibold transition shadow-sm"
@@ -111,6 +170,41 @@ export default function ManagerDashboardPage() {
             </button>
           </div>
         </div>
+        
+        {/* Password Change Modal */}
+        {showPasswordModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
+                <h3 className="text-lg font-bold text-gray-900">관리자 비밀번호 변경</h3>
+                <button onClick={() => setShowPasswordModal(false)} className="text-gray-400 hover:text-gray-600 transition">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <form onSubmit={handleChangePassword} className="p-6">
+                {passwordMsg && (
+                  <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg border border-red-100 mb-6">
+                    {passwordMsg}
+                  </div>
+                )}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">현재 비밀번호</label>
+                    <input type="password" required value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="w-full border py-2 px-3 rounded-md text-sm outline-none focus:ring-1 focus:ring-indigo-500 border-gray-300" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">새 비밀번호 (4자 이상)</label>
+                    <input type="password" required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full border py-2 px-3 rounded-md text-sm outline-none focus:ring-1 focus:ring-indigo-500 border-gray-300" />
+                  </div>
+                </div>
+                <div className="mt-8 flex gap-3 justify-end">
+                  <button type="button" onClick={() => setShowPasswordModal(false)} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">취소</button>
+                  <button type="submit" className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition shadow-sm">변경 저장</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* Analytics Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -162,7 +256,7 @@ export default function ManagerDashboardPage() {
             )}
           </div>
 
-          {/* Visitor Statistics Graph (Mock) */}
+          {/* Visitor Statistics Graph (Real DB Data) */}
           <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 sm:p-8 flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
@@ -170,55 +264,24 @@ export default function ManagerDashboardPage() {
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">사이트 방문 통계</h2>
               </div>
               <div className="flex bg-gray-100 p-1 rounded-lg">
-                <button className="px-3 py-1 text-xs font-semibold bg-white shadow-sm rounded-md text-gray-900">일간</button>
-                <button className="px-3 py-1 text-xs font-semibold text-gray-600 hover:text-gray-900 transition">주간</button>
-                <button className="px-3 py-1 text-xs font-semibold text-gray-600 hover:text-gray-900 transition">월간</button>
-                <button className="px-3 py-1 text-xs font-semibold text-gray-600 hover:text-gray-900 transition">연간</button>
+                <button onClick={() => setActiveTab('daily')} className={`px-3 py-1 text-xs font-semibold rounded-md transition ${activeTab === 'daily' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}>일간</button>
+                <button onClick={() => setActiveTab('weekly')} className={`px-3 py-1 text-xs font-semibold rounded-md transition ${activeTab === 'weekly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}>주간</button>
+                <button onClick={() => setActiveTab('monthly')} className={`px-3 py-1 text-xs font-semibold rounded-md transition ${activeTab === 'monthly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}>월간</button>
+                <button onClick={() => setActiveTab('yearly')} className={`px-3 py-1 text-xs font-semibold rounded-md transition ${activeTab === 'yearly' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}>연간</button>
               </div>
             </div>
 
-            {/* CSS Bar Chart Mock */}
-            <div className="flex-1 flex items-end justify-between gap-2 pt-10 pb-2 relative h-48 border-b border-gray-200">
-              {/* Fake Y-Axis labels */}
-              <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-400 font-medium pb-2 -ml-2">
-                <span>1K</span>
-                <span>500</span>
-                <span>0</span>
-              </div>
-              
-              {/* Bars */}
-              <div className="w-1/6 bg-blue-100 hover:bg-blue-200 transition rounded-t-md h-[30%] relative group cursor-pointer">
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 pointer-events-none">342 명</div>
-              </div>
-              <div className="w-1/6 bg-blue-200 hover:bg-blue-300 transition rounded-t-md h-[45%] relative group cursor-pointer">
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 pointer-events-none">451 명</div>
-              </div>
-              <div className="w-1/6 bg-blue-300 hover:bg-blue-400 transition rounded-t-md h-[25%] relative group cursor-pointer">
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 pointer-events-none">210 명</div>
-              </div>
-              <div className="w-1/6 bg-blue-400 hover:bg-blue-500 transition rounded-t-md h-[60%] relative group cursor-pointer">
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 pointer-events-none">630 명</div>
-              </div>
-              <div className="w-1/6 bg-blue-500 hover:bg-blue-600 transition rounded-t-md h-[40%] relative group cursor-pointer">
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 pointer-events-none">421 명</div>
-              </div>
-              <div className="w-1/6 bg-blue-600 hover:bg-blue-700 transition rounded-t-md h-[85%] relative group shadow-sm cursor-pointer border border-blue-500">
-                <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-3 py-1.5 rounded opacity-100 transition whitespace-nowrap z-10 shadow-lg font-bold">890 명</div>
+            <div className="flex-1 flex flex-col items-center justify-center pt-8 pb-4">
+              <div className="text-center">
+                <p className="text-sm text-gray-500 font-medium mb-2">{activeTab === 'daily' ? '오늘' : activeTab === 'weekly' ? '이번 주' : activeTab === 'monthly' ? '이번 달' : '올해'} 방문자 수</p>
+                <p className="text-5xl font-extrabold text-blue-600 tracking-tight">
+                  {visitorStats[activeTab as keyof typeof visitorStats].toLocaleString()} <span className="text-2xl text-gray-400 font-medium tracking-normal">명</span>
+                </p>
               </div>
             </div>
             
-            {/* Fake X-Axis labels */}
-            <div className="flex justify-between mt-2 text-xs text-gray-500 font-medium">
-              <span className="w-1/6 text-center">3/7</span>
-              <span className="w-1/6 text-center">3/8</span>
-              <span className="w-1/6 text-center">3/9</span>
-              <span className="w-1/6 text-center">3/10</span>
-              <span className="w-1/6 text-center">3/11</span>
-              <span className="w-1/6 text-center text-blue-700 font-bold">오늘</span>
-            </div>
-            
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-500">누적 총 접속자: <strong className="text-gray-900 border-b border-gray-900 pb-0.5">142,093</strong>명</p>
+            <div className="mt-6 text-center pt-6 border-t border-gray-100">
+              <p className="text-sm text-gray-500">누적 총 접속자: <strong className="text-gray-900 border-b border-gray-400 pb-0.5">{visitorStats.total.toLocaleString()}</strong>명</p>
             </div>
           </div>
         </div>
