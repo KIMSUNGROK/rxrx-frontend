@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { name: "주식", path: "/stock" },
   { name: "뉴스", path: "/news" },
   { name: "게시판", path: "/board" },
-  { name: "플랫폼", path: "#platform" },
+  { name: "플랫폼", path: "/platform" },
   { name: "파이프라인", path: "/pipeline" },
 ];
 

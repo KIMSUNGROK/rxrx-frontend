@@ -100,56 +100,6 @@ export default async function Home() {
       </section>
 
 
-      {/* 5. TECHNOLOGY CARDS SECTION */}
-      <section className="bg-[#f8f8fa] py-32 relative z-10">
-        <div className="max-w-[960px] mx-auto px-6">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="font-['DM_Mono'] text-[11px] uppercase tracking-[0.3em] text-[#1a9e96] block mb-4">TECHNOLOGY</span>
-              <h2 className="font-['Syne'] text-[36px] font-[700] tracking-[-0.02em] text-[#1a1a2e]">The OS for Drug Discovery</h2>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: "⛁",
-                title: "Massive Data",
-                desc: "50+ petabytes of highly-relatable, biological and chemical data generated in-house.",
-                color: "#1a9e96" // Data = Teal
-              },
-              {
-                icon: "⎔",
-                title: "Advanced Models",
-                desc: "Foundation models mapping relationships between genes, compounds, and disease states.",
-                color: "#2d7dd2" // Models = Blue
-              },
-              {
-                icon: "⚡",
-                title: "Super Compute",
-                desc: "BioHive-1 and BioHive-2 ranked among the fastest supercomputers entirely dedicated to biology.",
-                color: "#6c5ce7" // Compute = Purple
-              }
-            ].map((card, i) => (
-              <ScrollReveal key={i} delay={i * 100}>
-                <div className="bg-white rounded-xl p-8 border border-[rgba(0,0,0,0.04)] shadow-[0_2px_10px_rgba(0,0,0,0.02)] card-hover-glow group">
-                  <div 
-                    className="text-[28px] mb-5 transition-colors"
-                    style={{ color: '#8895a7' }}
-                  >
-                    <span className="group-hover:hidden">{card.icon}</span>
-                    <span className="hidden group-hover:inline" style={{ color: card.color }}>{card.icon}</span>
-                  </div>
-                  <h3 className="font-['Syne'] text-[20px] font-[700] text-[#1a1a2e] mb-3 group-hover:text-black transition-colors">{card.title}</h3>
-                  <p className="font-['DM_Mono'] text-[13px] text-[#6b7280] leading-[1.6]">{card.desc}</p>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
       {/* Global utility animation classes appended dynamically */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes fade-in-up {
