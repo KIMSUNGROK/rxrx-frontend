@@ -5,12 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { name: "Home", path: "/" },
-  { name: "Stock", path: "/stock" },
-  { name: "News", path: "/news" },
-  { name: "Board", path: "/board" },
-  { name: "Platform", path: "#platform" },
-  { name: "Pipeline", path: "/pipeline" },
+  { name: "홈", path: "/" },
+  { name: "주식", path: "/stock" },
+  { name: "뉴스", path: "/news" },
+  { name: "게시판", path: "/board" },
+  { name: "플랫폼", path: "#platform" },
+  { name: "파이프라인", path: "/pipeline" },
 ];
 
 export default function Navbar() {
