@@ -1,8 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #111827;
+  --background: #f8f8fa;
+  --foreground: #1a1a2e;
+  
+  /* Brand Colors */
+  --deep-teal: #1a9e96;
+  --ocean-blue: #2d7dd2;
+  --soft-purple: #6c5ce7;
+  --mint-green: #00b894;
+  --vivid-blue: #0984e3;
+  --lavender: #a29bfe;
+  --light-aqua: #55efc4;
+  --soft-pink: #fd79a8;
+
+  /* Text Colors */
+  --text-main: #1a1a2e;
+  --text-mid: #2d3748;
+  --text-light: #6b7280;
+  --text-sub: #8895a7;
+  --text-sub-light: #aab0bc;
+
+  /* Backgrounds */
+  --bg-main: #f8f8fa;
+  --bg-white: #ffffff;
 }
 
 body {
@@ -12,18 +33,43 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f3f4f6;
+  background: #f8f8fa;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
+  background: rgba(26, 158, 150, 0.18);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: rgba(26, 158, 150, 0.35);
+}
+
+/* Utilities */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #1a9e96, #2d7dd2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-expanded {
+  background: linear-gradient(135deg, #1a9e96 0%, #2d7dd2 50%, #6c5ce7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #1a9e96, #2d7dd2);
+}
+
+.hero-vignette {
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(248,248,250,0.5) 75%, rgba(248,248,250,0.95) 100%);
+}
+
+.hero-bottom-fade {
+  background: linear-gradient(to top, #f8f8fa, transparent);
 }
