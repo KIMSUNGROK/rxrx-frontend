@@ -94,10 +94,10 @@ export default function BoardPage() {
         </Link>
       </div>
 
-      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl overflow-hidden">
+      <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-sm rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-gray-50 border-b-2 border-gray-200 text-gray-500">
+            <thead className="bg-white/50 border-b-2 border-gray-200/50 text-gray-500">
               <tr>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24 text-center">번호</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider">제목</th>
@@ -148,7 +148,7 @@ export default function BoardPage() {
         </div>
         
         {/* Pagination mock */}
-        <div className="bg-gray-50 border-t border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div className="bg-white/40 border-t border-gray-200/50 px-6 py-4 flex items-center justify-between">
           <span className="text-sm text-gray-500">총 {posts.length}개의 게시글</span>
           {posts.length > 0 && (
              <div className="flex gap-1">

@@ -87,10 +87,10 @@ export default function NewsPage() {
         </button>
       </div>
 
-      <div className="bg-white border border-gray-200 shadow-sm rounded-2xl overflow-hidden">
+      <div className="bg-white/70 backdrop-blur-sm border border-white/40 shadow-sm rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-gray-50 border-b-2 border-gray-200 text-gray-500">
+            <thead className="bg-white/50 border-b-2 border-gray-200/50 text-gray-500">
               <tr>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider w-24 text-center">번호</th>
                 <th className="py-4 px-6 font-semibold uppercase tracking-wider">주요 소식</th>
@@ -141,7 +141,7 @@ export default function NewsPage() {
         </div>
         
         {/* Pagination mock */}
-        <div className="bg-gray-50 border-t border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div className="bg-white/40 border-t border-gray-200/50 px-6 py-4 flex items-center justify-between">
           <span className="text-sm text-gray-500">총 {news.length}개의 뉴스</span>
           <div className="flex gap-1">
             <button className="px-3 py-1 border border-gray-200 bg-white text-gray-400 rounded hover:bg-gray-50 disabled:opacity-50" disabled>
